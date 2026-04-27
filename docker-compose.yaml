@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  finance_forecaster:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile
+    container_name: finance_forecaster_app
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8000:8000"

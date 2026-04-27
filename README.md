@@ -5,7 +5,7 @@ Finance Forecasting ML Model Pipeline -- Predicting Next Day Financial Movements
 ## Team Information
 
 - **Project Lead:** Finance Forecasters (financeforecasters.mlops489@gmail.com)
-- **Team Members:** *To be filled in*
+- **Team Members:** Shang Andrews, James Russo, Joseph Hughes, Kevin Aguilar
 
 ## Project Overview
 

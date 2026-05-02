@@ -40,6 +40,7 @@ The methodology will employ a multifaceted approach by evaluating ARIMA and GARC
  Human expertise is availabe in the form of fund management groups 
 
 11. How would you solve the problem manually?
+    This could be solved manually using a significant amount of tabular data for each individual stock or fund with index funds for benchmarking and the manually calculating metrics like moving averages,     yield curve, et al. Building predictive models like ARIMA and Garch would be challenging, but then a RNN by hand woud be extremely challenging. 
 
     
 13. List the assumptions you (or others) have made so far.

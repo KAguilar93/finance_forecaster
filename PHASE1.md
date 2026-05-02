@@ -18,10 +18,10 @@ Phase 1 establishes the foundation for your MLOps project. This phase covers pro
 
 ## 2. Code Organization & Setup
 
-- [ ] **GitHub Repository**: Create repository with cookiecutter MLOps structure
-- [ ] **Environment Setup**: Configure Python virtual environment (venv or conda)
-- [ ] **Dependency Management**: Create and maintain requirements.txt or pyproject.toml
-- [ ] **Project Structure**: Organize code with clear separation of concerns (src/, tests/, data/, etc.)
+- [ x ] **GitHub Repository**: Create repository with cookiecutter MLOps structure
+- [ x ] **Environment Setup**: Configure Python virtual environment (venv or conda)
+- [ x ] **Dependency Management**: Create and maintain requirements.txt or pyproject.toml
+- [ x ] **Project Structure**: Organize code with clear separation of concerns (src/, tests/, data/, etc.)
 - [ ] **Version Pinning**: Pin all critical dependencies to specific versions
 - [ ] **Installation Documentation**: Document how to set up the development environment
 
@@ -29,8 +29,8 @@ Phase 1 establishes the foundation for your MLOps project. This phase covers pro
 
 ## 3. Version Control & Collaboration
 
-- [ ] **Regular Commits**: Establish commit discipline with descriptive, atomic commits
-- [ ] **Branching Strategy**: Implement feature branching (e.g., git-flow or GitHub Flow)
+- [ x ] **Regular Commits**: Establish commit discipline with descriptive, atomic commits
+- [ x ] **Branching Strategy**: Implement feature branching (e.g., git-flow or GitHub Flow)
 - [ ] **Pull Request Process**: Establish PR template and review requirements
 - [ ] **Team Roles**: Clearly define responsibilities (author: Finance Forecasters, team members, reviewers)
 - [ ] **Code Review Guidelines**: Document code review expectations and checklist
@@ -71,7 +71,7 @@ Phase 1 establishes the foundation for your MLOps project. This phase covers pro
   - [ ] Dependencies and requirements
   - [ ] Contributing guidelines
   - [ ] License information
-- [ ] **Code Docstrings**: Add docstrings to all functions and classes (NumPy/Google style)
+- [ x ] **Code Docstrings**: Add docstrings to all functions and classes (NumPy/Google style)
 - [ ] **Code Style**: Implement ruff configuration for linting
 - [ ] **Type Hints**: Add type hints throughout codebase
 - [ ] **Type Checking**: Configure mypy for static type checking

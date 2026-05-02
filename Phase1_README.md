@@ -21,20 +21,17 @@ The model will initially be built around the Investco QQQ Trust index fund, whic
 The methodology will employ a multifaceted approach by evaluating ARIMA and GARCH for statistical and volatility forecasting in conjunction with XGBoost and LSTM for non-linear pattern recognition. These individual estimators may be integrated into a robust hybrid ensemble framework to maximize the model’s predictive accuracy and resilience. 
 
 
-2. How will your solution be used?
+2. How will your solution be used?\
  The solution will be used by finance proffessionals to help analyze market movements in order to make business decisions on investments.
   
-3. What are the current solutions/workarounds (if any)?
+3. What are the current solutions/workarounds (if any)?\
  Currently proffesional tools exist to help predict market indicators using models based on company analytics as well as manual review of the data.
 
-5. How should you frame this problem (supervised/unsupervised, online/offline, etc.)?
+5. How should you frame this problem (supervised/unsupervised, online/offline, etc.)?\
    Our market analysis is performed offline, using a supervised ensemble model.
  
-6. How should performance be measured?
-  Performance is measured through classification and regression reports.
-
-7. Is the performance measure aligned with the business objective?
-8. What would be the minimum performance needed to reach the business objective?
+6. How should performance be measured?\
+  Performance is measured through classification and regression reports. The minimum performance we are looking for is a 60% accuracy minimum matching from the model output to actual market movements. We can compare to pre-exisiting models as a baseline performance of our model.
 9. What are comparable problems? Can you reuse experience or tools?
 10. Is human expertise available?
 11. How would you solve the problem manually?

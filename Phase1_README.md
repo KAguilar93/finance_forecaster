@@ -32,8 +32,15 @@ The methodology will employ a multifaceted approach by evaluating ARIMA and GARC
  
 6. How should performance be measured?\
   Performance is measured through classification and regression reports. The minimum performance we are looking for is a 60% accuracy minimum matching from the model output to actual market movements. We can compare to pre-exisiting models as a baseline performance of our model.
-9. What are comparable problems? Can you reuse experience or tools?
-10. Is human expertise available?
+
+9. What are comparable problems? Can you reuse experience or tools?\
+ Risk classification of financial markets and participants is comparable to our specific problem domain. We can use proffesional trader experience to aid in the analysis of our model performance, as well as pre-existing finance prediction models. 
+
+10. Is human expertise available?\
+ Human expertise is availabe in the form of fund management groups 
+
 11. How would you solve the problem manually?
-12. List the assumptions you (or others) have made so far.
-13. Verify assumptions if possible.
+
+    
+13. List the assumptions you (or others) have made so far.
+14. Verify assumptions if possible.

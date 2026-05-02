@@ -31,6 +31,8 @@ The methodology will employ a multifaceted approach by evaluating ARIMA and GARC
    Our market analysis is performed offline, using a supervised ensemble model.
  
 6. How should performance be measured?
+  Performance is measured through classification and regression reports.
+
 7. Is the performance measure aligned with the business objective?
 8. What would be the minimum performance needed to reach the business objective?
 9. What are comparable problems? Can you reuse experience or tools?

@@ -9,7 +9,8 @@ Finance Forecasting ML Model Pipeline -- Predicting Next Day Financial Movements
 
 ## Project Overview
 
-finance_forecaster is a machine learning project that implements Finance Forecasting ML Model Pipeline -- Predicting Next Day Financial Movements.
+finance_forecaster is a machine learning project that implements Finance Forecasting ML Model Pipeline -- Predicting Next Day Financial Movements.\
+See [Phase1_Readme.md](Phase1_README.md) for Project Proposal and more in depth information.
 
 **Key Objectives:**
 - [ ] Objective 1
@@ -18,12 +19,8 @@ finance_forecaster is a machine learning project that implements Finance Forecas
 
 ## Architecture Diagram
 
-```
-[Placeholder for architecture diagram]
+<img width="1782" height="878" alt="arch_diagram" src="https://github.com/user-attachments/assets/e9565b10-6844-476b-a359-a7f7583ab861" />
 
-Insert your system architecture diagram here, showing data flow, components,
-and interactions between different parts of the system.
-```
 
 ## Phase Deliverables
 
@@ -102,6 +99,21 @@ make help
 - **omegaconf** >= 2.3.0 - Hierarchical configuration
 ### Data Version Control
 - **dvc** >= 3.55.0 - Data Version Control
+
+### Data Sources
+- **yfinance**
+
+#### Statistical/time-series modeling
+- **statsmodels**
+- **arch**
+
+### API
+- **fastapi**
+- **uvicorn**
+
+### Model persistence / utilities
+- **joblib**
+- **python-dotenv**
 
 ### Development Tools
 - **pytest** >= 8.0 - Testing framework

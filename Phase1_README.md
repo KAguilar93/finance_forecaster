@@ -38,11 +38,11 @@ and organization while ensuring the description is comprehensive.
 
 2. How will your solution be used?\
  The solution will be used by finance proffessionals to help analyze market movements in order to make business
-3. decisions on investments.
+decisions on investments.
 
 3. What are the current solutions/workarounds (if any)?\
  Currently proffesional tools exist to help predict market indicators using models based on company analytics as
-4. well as manual review of the data.
+well as manual review of the data.
 
 5. How should you frame this problem (supervised/unsupervised, online/offline, etc.)?\
    Our market analysis is performed offline, using a supervised ensemble model.

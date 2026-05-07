@@ -100,6 +100,21 @@ make help
 ### Data Version Control
 - **dvc** >= 3.55.0 - Data Version Control
 
+### Data Sources
+- **yfinance**
+
+#### Statistical/time-series modeling
+- **statsmodels**
+- **arch**
+
+### # API
+- **fastapi**
+- **uvicorn**
+
+### Model persistence / utilities
+- **joblib**
+- **python-dotenv**
+
 ### Development Tools
 - **pytest** >= 8.0 - Testing framework
 - **pytest-cov** >= 5.0 - Code coverage

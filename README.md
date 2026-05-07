@@ -107,7 +107,7 @@ make help
 - **statsmodels**
 - **arch**
 
-### # API
+### API
 - **fastapi**
 - **uvicorn**
 

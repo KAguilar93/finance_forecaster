@@ -19,12 +19,8 @@ See [Phase1_Readme.md](Phase1_README.md) for Project Proposal and more in depth 
 
 ## Architecture Diagram
 
-```
-[Placeholder for architecture diagram]
+<img width="1782" height="878" alt="arch_diagram" src="https://github.com/user-attachments/assets/e9565b10-6844-476b-a359-a7f7583ab861" />
 
-Insert your system architecture diagram here, showing data flow, components,
-and interactions between different parts of the system.
-```
 
 ## Phase Deliverables
 

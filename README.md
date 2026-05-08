@@ -5,17 +5,13 @@ Finance Forecasting ML Model Pipeline -- Predicting Next Day Financial Movements
 ## Team Information
 
 - **Project Lead:** Finance Forecasters (financeforecasters.mlops489@gmail.com)
-- **Team Members:** Shang Andrews, James Russo, Joseph Hughes, Kevin Aguilar
+- **Team Members:** Shang Andrews (sandre15@depaul.edu); James Russo (jrusso13@depaul.edu);Joseph Hughes (jhughe50@depaul.edu); Kevin Aguilar (kaguila3@depaul.edu)
 
 ## Project Overview
 
 finance_forecaster is a machine learning project that implements Finance Forecasting ML Model Pipeline -- Predicting Next Day Financial Movements.\
-See [Phase1_Readme.md](Phase1_README.md) for Project Proposal and more in depth information.
+See [Project Proposal & Phase 1 README](Phase1_README.md) for Project Proposal and in depth information.
 
-**Key Objectives:**
-- [ ] Objective 1
-- [ ] Objective 2
-- [ ] Objective 3
 
 ## Architecture Diagram
 
@@ -38,7 +34,10 @@ See [Phase1_Readme.md](Phase1_README.md) for Project Proposal and more in depth 
 ### Prerequisites
 - Python 3.11+ installed
 - Git installed
-- (Optional) Docker and Docker Compose
+- DVC Installed
+- Hydra installed
+- UV installed
+- Docker and Docker Compose
 
 ### Installation
 
@@ -92,18 +91,21 @@ make help
 - **matplotlib** >= 3.9.0 - Visualization
 - **tqdm** >= 4.66.0 - Progress bars
 - **pyyaml** >= 6.0 - Configuration files
+
 ### Experiment Tracking
 - **mlflow** >= 2.16.0 - MLflow experiment tracking
+
 ### Configuration Management
 - **hydra-core** >= 1.3.0 - Hydra configuration framework
 - **omegaconf** >= 2.3.0 - Hierarchical configuration
+
 ### Data Version Control
 - **dvc** >= 3.55.0 - Data Version Control
 
-### Data Sources
+### Financial Data Sources
 - **yfinance**
 
-#### Statistical/time-series modeling
+### Statistical/time-series modeling
 - **statsmodels**
 - **arch**
 
@@ -231,15 +233,9 @@ make docs
 ```
 
 ## Contribution Summary
-
-- [ ] Team members have been assigned
-- [ ] Development environment has been set up
-- [ ] Initial data exploration completed
-- [ ] Model baseline established
-- [ ] Evaluation metrics defined
-- [ ] Documentation updated
-- [ ] All tests passing
-- [ ] Code reviewed and merged
+We are taking on a collaborative approach to this project, where each member will
+touch and collaborate on each portion of the project. In order to better understand 
+the core concepts and mechanisms behind each portion of the model and pipeline.
 
 ## References
 

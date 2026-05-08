@@ -1,3 +1,7 @@
+# Finance Forecasters
+## Kevin Aguilar, Shang Andrews, James Russo, Joseph Hughes
+### [SE489] ML Engineering for Production (MLOps)
+
 # finance_forecaster
 
 Finance Forecasting ML Model Pipeline -- Predicting Next Day Financial Movements
@@ -9,9 +13,14 @@ Finance Forecasting ML Model Pipeline -- Predicting Next Day Financial Movements
 
 ## Project Overview
 
-finance_forecaster is a machine learning project that implements Finance Forecasting ML Model Pipeline -- Predicting Next Day Financial Movements.\
+finance_forecaster is a machine learning project that implements a Finance Forecasting ML Model Pipeline that aims to predict Next Day Financial Movements by using time-series analysis. Additionally, we are building a pipeline around our model to enable continuous training with fresh data, continuous integration of model improvements, and continuous delivery of prediction services while maintaining traceable and reproducible experiments for validation and verification of our models performance. We are aiming for our model and pipeline to provide 60% accuracy of next day financial movements.\
+
 See [Project Proposal & Phase 1 README](Phase1_README.md) for Project Proposal and in depth information.
 
+**Key Objectives:**
+- [ ] Provide Next Day Finance Movement Preditions with ~60% Accuracy
+- [ ] Automated Continuous Training, Integration, and Delivery of Prediction Services in a Portable Environment
+- [ ] Maintain Traceability and Reproducibility of Model Predictions and Experiments for Third-Party Validation
 
 ## Architecture Diagram
 

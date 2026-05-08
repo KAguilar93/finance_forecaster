@@ -1,3 +1,7 @@
+# Finance Forecasters
+## Kevin Aguilar, Shang Andrews, James Russo, Joseph Hughes
+### [SE489] ML Engineering for Production (MLOps)
+
 # Project Description
 
 ## Project Scope and Objectives
@@ -56,3 +60,17 @@ analysis to begin with, and that the market is not fully irrational and chaotic.
 patterns that can be identified by machine learning to inform of future movements.
 We are also assuming that we can outperform manual review and analysis of market data to make informed decisions through
 the implementation of Artificial Intelligence and Machine Learning.
+
+## Selection of Data
+We are using data available from yfinance. We chose yfinance due to its public availabilty, thorough recording of financial market history, and it is freely accessible. In order to simplify our model development and experimentation we are limiting ourselves to only using the QQQ index fund for development. However, the objective is to allow users to track any stock or index fund.
+We are currently accessing our data by running the download.py file to download the desired data in the requisite format from yfinance. Our data pipeline for downloading and checking in our data to dvc with version tagging, and feeding it to our model for training is a work in progress.
+
+## Model Considerations
+We have opted to develop our own model in order to limit the scope of predictions provided to next day financial movements of any stock or index. Using QQQ as our selected development and testing index. In this way we can control and extract only the relevant features and labels from the data. Additionally, by developing our own model we can run the required time-series and regression analysis while maintain high performance, by avoiding larger models that may require excess computation and training. Allowing us to stay focused on our desired objective of next day market predictions. As well as provide us the experience in developing a small scale machine learning model while building a continuous training, integration, and delivery pipeline around it.
+
+## Open Source Tools
+We are using yfinance for pulling our required data, sci-kit learn and scipy for model development, statsmodels and arch for statistical and time-series modeling, and fastapi and uvicorn for api development.
+
+## Findings, challenges, and areas for improvement
+We found that it is rather difficult to predict financial movements due to the natural volatility of the stock market, unique data requirements and transformations for time-series analysis, as well a human psychological factor involved. Particularly in markets being influenced due to participant interactions, including attempts to beat the market by using their own biases and predictions that are based in feeling rather than hard data. Determining wether to use linear regression or a more difficult but advanced RNN and LSTM analysis, designed for time-series forecasting was a main challenge of our model development.
+Areas for improvement include refactoring our model by distributing the various modules into their own python files for improved separation of concerns, readability, and maintainability. As well as improving our data and training pipelines in order to automate the process. In order to maintain model accuracy we will likely need to employ dynamic training architectures such as orchestrated pull-based or message-based training in order to train the model at regular intervals to include updated financial information and movements, depending if we want real time data ingestion or not. Finally, documentation could use some work to become more thorough as we further refine our data gathering, training, and development processes.

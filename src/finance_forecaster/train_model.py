@@ -5,6 +5,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+import mlflow
+
 from finance_forecaster.config import DEFAULT_CONFIG, MODELS_DIR, PROCESSED_DATA_DIR
 from finance_forecaster.logging_config import get_logger, setup_logging
 from finance_forecaster.utils.seed import set_seed
@@ -12,18 +14,38 @@ from finance_forecaster.utils.seed import set_seed
 logger = get_logger(__name__)
 
 
-def train(
-    data_path: Path, model_dir: Path, epochs: int, batch_size: int, lr: float
-) -> None:
+def train(data_path: Path, model_dir: Path, epochs: int, batch_size: int, lr: float) -> None:
     """Train the model and persist the fitted artifact to ``model_dir``.
 
     Fill in the training loop / estimator fit for your problem and
     call ``model.save(model_dir / "model.joblib")`` at the end.
     """
-    logger.info(
-        "Training with data=%s epochs=%d bs=%d lr=%g", data_path, epochs, batch_size, lr
-    )
     model_dir.mkdir(parents=True, exist_ok=True)
+
+    mlflow_cfg = DEFAULT_CONFIG.mlflow
+    mlflow.set_tracking_uri(mlflow_cfg.tracking_uri)
+    mlflow.set_experiment(mlflow_cfg.experiment_name)
+
+    if mlflow_cfg.system_metrics:
+        mlflow.enable_system_metrics_logging()
+
+    with mlflow.start_run():
+        mlflow.log_params(
+            {
+                "data_path": str(data_path),
+                "epochs": epochs,
+                "batch_size": batch_size,
+                "learning_rate": lr,
+            }
+        )
+        logger.info("Training with data=%s epochs=%d bs=%d lr=%g", data_path, epochs, batch_size, lr)
+
+        # TODO: insert training loop here, then log metrics and artifact, e.g.:
+        # metrics = evaluate(model, val_data)
+        # mlflow.log_metrics({"mse": metrics["mse"], "rmse": metrics["rmse"]})
+        # mlflow.sklearn.log_model(model, "model")
+
+        logger.info("MLflow run logged to experiment '%s'", mlflow_cfg.experiment_name)
 
 
 def main() -> None:
@@ -41,9 +63,7 @@ def main() -> None:
     setup_logging()
     set_seed(args.seed)
 
-    train(
-        args.data_path, args.model_dir, args.epochs, args.batch_size, args.learning_rate
-    )
+    train(args.data_path, args.model_dir, args.epochs, args.batch_size, args.learning_rate)
     logger.info("Training complete")
 
 

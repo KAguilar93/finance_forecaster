@@ -19,6 +19,9 @@ mlflow
 dvc
 dvc-gdrive
 
+# Logging
+rich
+
 # Configuration
 hydra-core
 omegaconf

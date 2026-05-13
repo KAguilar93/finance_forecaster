@@ -36,7 +36,13 @@ evaluation:
 
 logging:
   level: INFO
+  log_file: app.log
   output_dir: logs
+
+mlflow:
+  tracking_uri: mlruns
+  experiment_name: finance_forecaster_training
+  system_metrics: true
 
 paths:
   models_dir: models

@@ -44,6 +44,11 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "B", "UP"]
+ignore = [
+    "N806",  # ML convention: X_train, X_test uppercase is standard
+    "N803",  # ML convention: X argument uppercase is standard
+    "B905",  # zip() strict= not needed for internal ML data pairing
+]
 
 [tool.mypy]
 python_version = "3.11"

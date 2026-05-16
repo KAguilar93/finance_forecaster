@@ -14,6 +14,10 @@ yfinance
 statsmodels
 arch
 
+# Deep learning
+tensorflow>=2.16.0
+keras>=2.16.0
+
 # MLOps
 mlflow
 dvc

@@ -9,9 +9,7 @@ from typing import Any
 import matplotlib.pyplot as plt
 
 
-def plot_training_history(
-    history: dict[str, list[float]], output_path: str | None = None
-) -> None:
+def plot_training_history(history: dict[str, list[float]], output_path: str | None = None) -> None:
     """Plot training history curves.
 
     Args:
@@ -37,9 +35,7 @@ def plot_training_history(
     plt.close(fig)
 
 
-def plot_confusion_matrix(
-    cm: Any, labels: list[str] | None = None, output_path: str | None = None
-) -> None:
+def plot_confusion_matrix(cm: Any, labels: list[str] | None = None, output_path: str | None = None) -> None:
     """Plot a confusion matrix.
 
     Args:

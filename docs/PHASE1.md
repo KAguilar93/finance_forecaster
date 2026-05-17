@@ -83,7 +83,7 @@ Models are implemented in `src/finance_forecaster/models/` with a shared `BaseMo
 ## 3. Version Control & Collaboration
 
 - [x] **Regular Commits**: Descriptive commits across team branches
-- [x] **Branching Strategy**: Feature branching — `development`, `containerization`, `joe-dev`, `documentation`, etc.
+- [x] **Branching Strategy**: Feature branching — `development-staging`, `containerization`, `joe-dev`, `documentation`, etc.
 - [x] **Pull Request Process**: PRs used for all merges to `main`
 - [x] **Team Roles**: Four members defined; Finance Forecasters team email for coordination
 - [ ] **Code Review Guidelines**: Not formally documented
@@ -128,5 +128,111 @@ Models are implemented in `src/finance_forecaster/models/` with a shared `BaseMo
 
 ---
 
-> See [README.md](../README.md) for setup, installation, and usage instructions.
+## Running Phase 1
+
+### Prerequisites
+
+- Python 3.11+
+- Git
+- Virtual environment activated (see [Getting Started](getting_started.md))
+
+### Step 1: Install Dependencies
+
+```bash
+pip install -e ".[dev]"
+```
+
+### Step 2: Download Data
+
+Download QQQ historical data from yfinance and run baseline evaluation:
+
+```bash
+python scripts/baseline_run.py
+```
+
+This saves raw data to `data/raw/qqq_raw.csv` and writes a baseline report to `reports/baseline_results.md`.
+
+### Step 3: Train the Model
+
+Fit an ARIMA model and log the run to MLflow:
+
+```bash
+python -m finance_forecaster.train_model --arima-p 1 --arima-d 0 --arima-q 1
+```
+
+### Step 4: Generate Predictions
+
+Run next-day directional forecasting:
+
+```bash
+python -m finance_forecaster.predict_model --input data/raw/qqq_raw.csv --output predictions/predictions.csv
+```
+
+Expected output:
+```
+INFO  Loaded 2513 trading days
+INFO  Running ARIMA(1,0,1) rolling forecast over 30 days...
+INFO  Next-day forecast: 0.1863% -> UP
+INFO  Rolling window accuracy (30 days): 53.3%
+INFO  Next trading day prediction: UP (0.1863%)
+```
+
+### Step 5: Run Tests
+
+```bash
+pytest tests/ -v
+```
+
+---
+
+## Development Workflow
+
+### Code Quality
+
+```bash
+# Lint and format
+make lint
+make format
+
+# Type checking
+mypy src
+```
+
+### Pre-commit Hooks
+
+Pre-commit hooks run automatically on each commit. To run manually:
+
+```bash
+pre-commit run --all-files
+```
+
+---
+
+## Troubleshooting
+
+### ModuleNotFoundError
+
+Ensure the package is installed in editable mode:
+```bash
+pip install -e .
+```
+
+### No data file found
+
+Run the baseline script to download data before training or predicting:
+```bash
+python scripts/baseline_run.py
+```
+
+### Pre-commit hook failures
+
+Hooks may auto-fix files on first run — just re-stage and commit again:
+```bash
+git add -A
+git commit -m "your message"
+```
+
+---
+
+> See [README.md](../README.md) for full setup and usage instructions.
 > See [reports/baseline_results.md](../reports/baseline_results.md) for baseline model evaluation results.

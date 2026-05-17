@@ -8,7 +8,6 @@ from pathlib import Path
 
 import pandas as pd
 
-from finance_forecaster.config import PROCESSED_DATA_DIR
 from finance_forecaster.features.features import add_log_returns
 from finance_forecaster.logging_config import get_logger, setup_logging
 from finance_forecaster.models.arima import generate_rolling_arima_forecasts
@@ -94,7 +93,7 @@ def main() -> None:
     parser.add_argument(
         "--input",
         type=Path,
-        default=PROCESSED_DATA_DIR / "qqq_raw.csv",
+        default=Path("data/raw/qqq_raw.csv"),
         help="Path to CSV with price data",
     )
     parser.add_argument(

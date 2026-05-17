@@ -65,8 +65,8 @@ pip install -r requirements.txt
 ### Development Setup
 
 ```bash
-# Install development dependencies
-pip install -r requirements_dev.txt
+# Install package with dev tools
+pip install -e ".[dev]"
 
 # Set up pre-commit hooks
 pre-commit install
@@ -197,7 +197,6 @@ finance_forecaster/                  # Repository root
 ├── docker-compose.yaml                # Docker Compose setup
 ├── pyproject.toml                     # Project config & dependencies
 ├── requirements.txt                   # Runtime dependencies
-├── requirements_dev.txt               # Development dependencies
 ├── LICENSE
 └── README.md
 ```

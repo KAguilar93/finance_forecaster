@@ -33,9 +33,6 @@ def add_lstm_features(df: pd.DataFrame) -> pd.DataFrame:
     # Market regime related
     df["volume_momentum_5"] = df["volume"].rolling(5).mean() if "volume" in df.columns else 0
 
-    # Add your other derived features here (vix, spy, etc.)
-    # I'll help expand this in the next steps if needed
-
     df["target"] = (df["log_return"].shift(-1) > 0).astype(int)
 
     return df

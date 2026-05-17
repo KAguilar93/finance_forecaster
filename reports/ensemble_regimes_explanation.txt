@@ -1,0 +1,32 @@
+=== ENSEMBLE REGIMES EXPLANATION (ARIMA + GARCH + LSTM) ===
+
+This system combines three models (ARIMA, GARCH, LSTM) with market regime detection to make next-day trading decisions for QQQ.
+
+1. MARKET REGIMES:
+   - risk_off          : High volatility or high VIX → Stay in cash (NO TRADE)
+   - low_vol_uptrend   : Low volatility + upward trend → Most favorable for long positions
+   - low_vol_downtrend : Low volatility + downward trend → Cautious, limited trading
+   - neutral           : Default / unclear regime
+
+2. ENSEMBLE SIGNALS:
+   - ARIMA(1,0,1)      : Short-term momentum forecast
+   - GARCH(1,1)        : Volatility regime filter
+   - LSTM              : Deep learning direction probability using many features
+   - Momentum          : Recent price movement
+
+3. FINAL DECISION LOGIC:
+   - If regime = risk_off                  → NO TRADE
+   - If regime = low_vol_uptrend and prob > 0.55 → BUY - STRONG UP
+   - If regime = low_vol_downtrend and prob < 0.45 → SELL / AVOID
+   - High ensemble probability (> 0.58)    → BUY
+   - Low ensemble probability (< 0.42)     → SELL / SHORT
+   - Otherwise                             → NO TRADE (Neutral)
+
+4. OUTPUT FILES:
+   - reports/next_day_ensemble_prediction.txt   → Latest prediction
+   - reports/figures/ensemble_regime_backtest.png → Equity curve
+   - reports/*.csv                              → Full backtest results
+
+This approach reduces risk by only taking high-confidence trades in favorable regimes.
+
+Last updated: May 2026

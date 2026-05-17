@@ -1,0 +1,4 @@
+=== NEXT DAY ENSEMBLE PREDICTION ===
+Current Regime       : low_vol_uptrend
+Ensemble Prob UP     : 0.9000
+Recommendation       : BUY - STRONG UP

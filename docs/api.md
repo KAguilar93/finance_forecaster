@@ -91,16 +91,19 @@ set_seed(42)
 ## Training / Prediction CLIs
 
 ```bash
-python -m finance_forecaster.train_model --epochs 100 --batch-size 64
-python -m finance_forecaster.predict_model --model-path models/model.joblib --input data/processed/test.csv
+# Train ARIMA(1,0,1) and log run to MLflow
+python -m finance_forecaster.train_model --arima-p 1 --arima-d 0 --arima-q 1
+
+# Generate next-day predictions
+python -m finance_forecaster.predict_model --input data/raw/qqq_raw.csv --output predictions/predictions.csv
 ```
 
-## Hydra Configuration
+## Configuration
 
-Configuration is managed through Hydra — see `configs/config.yaml` for defaults and override at runtime:
+Defaults live in `configs/config.yaml`. Override training parameters via CLI flags:
 
 ```bash
-python -m finance_forecaster.train_model model.name=custom_model training.epochs=200
+python -m finance_forecaster.train_model --arima-p 2 --arima-d 0 --arima-q 2 --test-split 0.15
 ```
 
 ---

@@ -9,6 +9,9 @@ This module implements a backtesting system that combines:
 
 import logging
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,10 +27,22 @@ FIGURES_DIR = Path("reports/figures")
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
-def load_processed_data():
+logger = logging.getLogger(__name__)
+
+# Directory paths for data, reports, and visualizations
+PROCESSED_DIR = Path("data/processed")
+REPORTS_DIR = Path("reports")
+FIGURES_DIR = Path("reports/figures")
+
+# Create output directories if they don't exist
+REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def load_processed_data() -> pd.DataFrame | None:
     """
     Load the processed QQQ dataset containing prices, volumes, and engineered features.
-    
+
     Returns:
         pd.DataFrame: Processed data with all features, or None if file not found
     """
@@ -41,17 +56,17 @@ def load_processed_data():
     return df
 
 
-def run_ensemble_regime_backtest(df: pd.DataFrame):
+def run_ensemble_regime_backtest(df: pd.DataFrame) -> None:
     """
     Execute ensemble-based backtest with regime-aware trading rules.
-    
+
     Workflow:
     1. Detect volatility and trend regimes
     2. Combine ARIMA, GARCH, LSTM signals into ensemble probability
     3. Generate next-day trading recommendation
     4. Backtest strategy performance with trade statistics
     5. Save reports and visualizations
-    
+
     Args:
         df (pd.DataFrame): Processed data with price, volume, and features
     """
@@ -66,9 +81,11 @@ def run_ensemble_regime_backtest(df: pd.DataFrame):
 
     # High volatility vs low volatility classification
     df["volatility_regime"] = np.where(vol_series > vol_cutoff, "high_vol", "low_vol")
-    
+
     # Trend regime: compare 20-day MA vs 50-day MA
-    df["trend_regime"] = np.where(df["price"].rolling(20).mean() > df["price"].rolling(50).mean(), "uptrend", "downtrend")
+    df["trend_regime"] = np.where(
+        df["price"].rolling(20).mean() > df["price"].rolling(50).mean(), "uptrend", "downtrend"
+    )
 
     # Combine volatility and trend into compound market regime
     # risk_off: high volatility environment (avoid trading)
@@ -85,10 +102,12 @@ def run_ensemble_regime_backtest(df: pd.DataFrame):
     # === ENSEMBLE SIGNAL GENERATION ===
     # Combine three signals: momentum (5d), volatility (20d), and cumulative returns (10d)
     # Each signal contributes ±1 to ensemble_score (-3 to +3 range)
-    df["ensemble_score"] = (np.sign(df["log_return"].rolling(5).mean()) +
-                            np.where(df["log_return"].rolling(20).std() < vol_cutoff, 1, -1) +
-                            np.sign(df["log_return"].rolling(10).sum()))
-    
+    df["ensemble_score"] = (
+        np.sign(df["log_return"].rolling(5).mean())
+        + np.where(df["log_return"].rolling(20).std() < vol_cutoff, 1, -1)
+        + np.sign(df["log_return"].rolling(10).sum())
+    )
+
     # Convert score to probability: base 50% ± (score/2 * 15%), clipped to [10%, 90%]
     df["ensemble_prob_up"] = (0.5 + df["ensemble_score"] * 0.15).clip(0.1, 0.9)
 
@@ -110,7 +129,7 @@ def run_ensemble_regime_backtest(df: pd.DataFrame):
     else:
         recommendation = "NO TRADE (Neutral)"  # 45%-55% range: neutral
 
-    logger.info(f"\n=== NEXT DAY ENSEMBLE PREDICTION ===")
+    logger.info("\n=== NEXT DAY ENSEMBLE PREDICTION ===")
     logger.info(f"Current Regime       : {regime}")
     logger.info(f"Ensemble Prob UP     : {prob:.4f}")
     logger.info(f"Recommendation       : {recommendation}")
@@ -123,12 +142,13 @@ def run_ensemble_regime_backtest(df: pd.DataFrame):
 
     # Calculate next day returns for trades (shift forward by 1 day)
     df["next_day_return"] = df["log_return"].shift(-1)
-    
+
     # Mark trades as correct (1) or incorrect (0) when position is held
     # Only evaluates days when position == 1
     df["trade_correct"] = np.where(
-        (df["position"] == 1) & (df["next_day_return"] > 0), 1,
-        np.where((df["position"] == 1) & (df["next_day_return"] <= 0), 0, np.nan)
+        (df["position"] == 1) & (df["next_day_return"] > 0),
+        1,
+        np.where((df["position"] == 1) & (df["next_day_return"] <= 0), 0, np.nan),
     )
 
     # === TRADE PERFORMANCE METRICS ===
@@ -137,7 +157,7 @@ def run_ensemble_regime_backtest(df: pd.DataFrame):
     if len(traded_days) > 0:
         hit_rate = traded_days.mean() * 100  # Accuracy: wins / total_trades
         num_trades = len(traded_days)
-        logger.info(f"\n=== TRADE PERFORMANCE ===")
+        logger.info("\n=== TRADE PERFORMANCE ===")
         logger.info(f"Total Trades Taken   : {num_trades}")
         logger.info(f"Hit Rate (Accuracy)  : {hit_rate:.1f}%")
         # Success criterion: >= 55% accuracy (profitable after costs)
@@ -197,7 +217,7 @@ Generated on: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M')}
     logger.info("Equity curve saved to reports/figures/ensemble_regime_backtest.png")
 
 
-def main():
+def main() -> None:
     """
     Entry point for the backtesting framework.
     Loads data and runs the ensemble regime-aware backtest.

@@ -1,4 +1,4 @@
-.PHONY: data train backtest full regime-help clean
+.PHONY: install dev data train predict backtest full test lint format clean docker_build docker_run docs regime-help
 
 # Default target
 all: full
@@ -9,34 +9,35 @@ data:
 
 # Train models (ARIMA, GARCH, LSTM)
 train:
-	python -m models.train_model
+	python -m finance_forecaster.train_model
 
-# Regime-aware backtest + next day prediction
+predict:
+	python -m finance_forecaster.predict_model
+
 backtest:
 	python -m tests.regime_aware_backtest
 
-# Run everything in sequence (recommended)
 full:
-	@echo "Starting Full Pipeline..."
+	@echo "Starting full pipeline..."
 	@$(MAKE) data
 	@$(MAKE) train
 	@$(MAKE) backtest
-	@echo ""
-	@echo "================================================================"
-	@echo "FULL PIPELINE COMPLETED SUCCESSFULLY"
-	@echo "================================================================"
-	@echo "Check these folders:"
-	@echo "   reports/               → Predictions and metrics"
-	@echo "   reports/figures/       → All generated charts"
-	@echo "   data/processed/        → Final processed data"
-	@echo "================================================================"
+	@echo "Pipeline complete. Check reports/ for outputs."
 
-# Show regimes explanation
 regime-help:
-	@echo "Opening ensemble regimes explanation..."
-	open reports/ensemble_regimes_explanation.txt
+	python -c "print(open('reports/ensemble_regimes_explanation.txt').read())"
 
-# Clean outputs
+test:
+	pytest tests/
+
+lint:
+	ruff check .
+	ruff format --check .
+
+format:
+	ruff check --fix .
+	ruff format .
+
 clean:
 	rm -rf data/processed/*.csv reports/*.csv reports/figures/*.png reports/*.txt models/*.pkl
 

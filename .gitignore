@@ -132,7 +132,15 @@ data/processed/*
 models/*.pt
 models/*.pkl
 models/*.h5
+models/*.joblib
+models/*.keras
 !models/.gitkeep
+
+# MLflow
+mlruns/
+
+# Application logs
+logs/
 
 # IDEs
 .vscode/

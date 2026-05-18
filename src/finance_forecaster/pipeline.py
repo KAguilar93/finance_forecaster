@@ -1,19 +1,18 @@
-
-
-import pandas as pd
 import numpy as np
-from .config import REPORTS_DIR, FIGURES_DIR, PROCESSED_DIR
-from .data.download import download_stock_data, download_external_market_features
-from .data.features import add_log_returns, add_lstm_features
-from .models.garch import fit_garch_model
-from .models.stationarity import run_adf_test, run_kpss_test
-from .models.arima import generate_rolling_arima_forecasts
-from .models.lstm import train_lstm_model
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
 from .backtest.regime_aware import run_regime_aware_backtest
-from .utils.plotting import save_regime_aware_equity_curve
+from .config import PROCESSED_DATA_DIR, REPORTS_DIR
+from .data.download import download_external_market_features, download_stock_data
+from .data.features import add_log_returns, add_lstm_features
+from .models.arima import generate_rolling_arima_forecasts
+from .models.garch import fit_garch_model
+from .models.lstm import train_lstm_model
+from .models.stationarity import run_adf_test, run_kpss_test
 
 
-def run_pipeline(ticker: str = "qqq", start_date: str = "2015-01-01", end_date: str = "2025-01-01"):
+def run_pipeline(ticker: str = "qqq", start_date: str = "2015-01-01", end_date: str = "2025-01-01") -> None:
     """Full pipeline with real LSTM training."""
     print(f"Starting full pipeline for {ticker}...")
 
@@ -41,7 +40,7 @@ def run_pipeline(ticker: str = "qqq", start_date: str = "2015-01-01", end_date: 
     df = add_lstm_features(df)
 
     # Prepare data for LSTM
-    feature_cols = [col for col in df.columns if col not in ['target']]
+    feature_cols = [col for col in df.columns if col not in ["target"]]
     features = df[feature_cols].values
     target = df["target"].values
 
@@ -52,10 +51,10 @@ def run_pipeline(ticker: str = "qqq", start_date: str = "2015-01-01", end_date: 
     lookback = 30
     X, y = [], []
     for i in range(lookback, len(features_scaled)):
-        X.append(features_scaled[i-lookback:i])
+        X.append(features_scaled[i - lookback : i])
         y.append(target[i])
-    X = np.array(X)
-    y = np.array(y)
+    X = np.array(X)  # type: ignore[assignment]
+    y = np.array(y)  # type: ignore[assignment]
 
     X_train = X[:split_index]
     X_test = X[split_index:]
@@ -63,21 +62,18 @@ def run_pipeline(ticker: str = "qqq", start_date: str = "2015-01-01", end_date: 
     y_test = y[split_index:]
 
     # Full LSTM training
-    model, history, y_pred_prob, y_pred = train_lstm_model(X_train, y_train, X_test, y_test)
+    model, history, y_pred_prob, y_pred = train_lstm_model(X_train, y_train, X_test, y_test)  # type: ignore[arg-type]
 
     # ARIMA
-    prediction_dates = df.index[-len(y_test):]
+    prediction_dates = df.index[-len(y_test) :]
     arima_forecasts = generate_rolling_arima_forecasts(df, prediction_dates)
 
     # Backtest
-    lstm_predictions = pd.DataFrame({
-        "date": prediction_dates,
-        "predicted_probability_up": y_pred_prob
-    })
+    lstm_predictions = pd.DataFrame({"date": prediction_dates, "predicted_probability_up": y_pred_prob})
     backtest_df, summary = run_regime_aware_backtest(df, lstm_predictions, arima_forecasts, ticker)
 
     # Save outputs
-    df.to_csv(f"{PROCESSED_DIR}/{ticker}_processed.csv", index=True)
+    df.to_csv(f"{PROCESSED_DATA_DIR}/{ticker}_processed.csv", index=True)
     if not backtest_df.empty:
         backtest_df.to_csv(f"{REPORTS_DIR}/{ticker}_backtest.csv", index=False)
 

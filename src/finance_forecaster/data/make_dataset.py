@@ -33,6 +33,13 @@ RAW_DIR = Path("data/raw")
 PROCESSED_DIR = Path("data/processed")
 
 
+logger = logging.getLogger(__name__)
+
+# Directory paths for raw backups and processed data
+RAW_DIR = Path("data/raw")
+PROCESSED_DIR = Path("data/processed")
+
+
 def download_stock_data(ticker: str = "QQQ", start: str = "2015-01-01", end: str = "2026-05-15") -> pd.DataFrame:
     """
     Download historical stock price and volume data from Yahoo Finance.

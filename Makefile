@@ -1,20 +1,13 @@
 .PHONY: install dev data train predict backtest full test lint format clean docker_build docker_run docs regime-help
 
-# Note: 'uv' is a faster alternative to pip. Install with: pip install uv
-# Then replace 'pip install' with 'uv pip install' in the commands below.
+# Default target
+all: full
 
-install:
-	pip install -U pip
-	pip install -r requirements.txt
-	pip install -e .
-
-dev: install
-	pip install -r requirements_dev.txt
-	pre-commit install
-
+# Data pipeline
 data:
 	python -m finance_forecaster.data.make_dataset
 
+# Train models (ARIMA, GARCH, LSTM)
 train:
 	python -m finance_forecaster.train_model
 

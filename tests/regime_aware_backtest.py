@@ -13,6 +13,19 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+logger = logging.getLogger(__name__)
+
+# Directory paths for data, reports, and visualizations
+PROCESSED_DIR = Path("data/processed")
+REPORTS_DIR = Path("reports")
+FIGURES_DIR = Path("reports/figures")
+
+# Create output directories if they don't exist
+REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
 logger = logging.getLogger(__name__)
 

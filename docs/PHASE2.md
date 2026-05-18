@@ -76,6 +76,19 @@ docker build -t finance-forecaster -f dockerfiles/Dockerfile .
 docker run --rm -v ${PWD}/models:/app/models finance-forecaster
 ```
 
+## Section 2: Debugging Scenario
+
+One significant issue encountered during development involved DVC authentication with the Google Drive remote used to store versioned datasets. Running `dvc pull` initially failed with the error `invalid_grant: Bad Request`, which indicated that a previously cached OAuth refresh token had expired or been revoked. The solution was to remove the stale credential file stored in the local PyDrive2 cache under the user's AppData directory and rerun `dvc pull`. This forced DVC to open a browser-based Google authentication flow and generate a new valid access token. After successful authentication, the raw and processed datasets were downloaded correctly from the shared Google Drive folder.
+
+## Section 3: Profiling Python and Machine Learning Code
+
+Python's built-in `cProfile` module was used to analyze the performance of the training pipeline. The script `scripts/profile_training.py` executes `finance_forecaster.train_model.main()` under a profiler and saves both raw profiler output and a human-readable report to `reports/profiling/`.
+
+### Profiling Commands
+
+```bash
+python scripts/profile_training.py
+
 ### MLflow Experiment Tracking (Section 4)
 ```bash
 # Run a training experiment (ARIMA(1,0,1))

@@ -1,0 +1,14 @@
+# Alternative quick-test configuration for Phase 2 Hydra documentation.
+# Uses a different ARIMA order to demonstrate configurable experiments.
+
+model:
+  type: arima
+
+training:
+  test_split: 0.2
+  arima_p: 2
+  arima_d: 0
+  arima_q: 2
+
+mlflow:
+  experiment_name: finance_forecaster_training

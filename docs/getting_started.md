@@ -61,33 +61,40 @@ pytest tests/
 
 ### Data Download
 
-Download QQQ historical data from yfinance and run the baseline evaluation:
+Download QQQ and market feature data from yfinance (tries DVC/Google Drive cache first):
 
 ```bash
-python scripts/baseline_run.py
+make data
 ```
 
-This saves raw data to `data/raw/qqq_raw.csv` and writes a baseline report to `reports/baseline_results.md`.
+This saves raw data to `data/raw/` and processed data to `data/processed/`.
 
 ### Model Training
 
-Train an ARIMA model and log the run to MLflow:
+Train an ARIMA or LSTM model and log the run to MLflow:
 
 ```bash
+make train
+# or with custom parameters:
 python -m finance_forecaster.train_model --arima-p 1 --arima-d 0 --arima-q 1
 ```
 
-Run a second experiment to compare:
+### Backtest
+
+Run the regime-aware ensemble backtest and generate prediction outputs:
 
 ```bash
-python -m finance_forecaster.train_model --arima-p 2 --arima-d 0 --arima-q 2
+make backtest
 ```
 
-View results in the MLflow UI:
+Outputs: `reports/next_day_ensemble_prediction.txt`, `reports/trade_performance.txt`, `reports/figures/`
+
+### Run Full Pipeline
+
+Run data → train → backtest in one command:
 
 ```bash
-mlflow ui
-# Navigate to http://127.0.0.1:5000
+make full
 ```
 
 ### Model Prediction

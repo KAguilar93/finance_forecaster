@@ -78,11 +78,17 @@ pytest tests/
 ### Running the Pipeline
 
 ```bash
-# Prepare data
+# Prepare data (downloads QQQ + market features)
 make data
 
-# Train the model
+# Train the model (ARIMA/LSTM + MLflow tracking)
 make train
+
+# Run regime-aware backtest + next-day prediction
+make backtest
+
+# Run full pipeline in one command
+make full
 
 # Generate predictions
 make predict

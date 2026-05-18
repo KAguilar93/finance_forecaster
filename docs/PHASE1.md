@@ -122,7 +122,7 @@ Models are implemented in `src/finance_forecaster/models/` with a shared `BaseMo
 - [x] **Code Style**: `ruff` configured in `pyproject.toml` with E/F/I/N/W/B/UP rules
 - [x] **Type Hints**: Type hints throughout `src/finance_forecaster/`
 - [x] **Type Checking**: `mypy` configured in `pyproject.toml`; passes on pre-commit
-- [x] **Makefile**: `make install`, `make dev`, `make train`, `make test`, `make lint`, `make format`, `make clean`, `make docker_build`, `make docker_run`, `make docs`
+- [x] **Makefile**: `make install`, `make dev`, `make data`, `make train`, `make backtest`, `make full`, `make predict`, `make test`, `make lint`, `make format`, `make clean`, `make docker_build`, `make docker_run`, `make docs`
 - [ ] **CONTRIBUTING.md**: Not yet created
 - [ ] **API Documentation**: FastAPI docs auto-generated; MkDocs setup in progress
 
@@ -144,13 +144,13 @@ pip install -e ".[dev]"
 
 ### Step 2: Download Data
 
-Download QQQ historical data from yfinance and run baseline evaluation:
+Download QQQ and market feature data (tries DVC/Google Drive cache first):
 
 ```bash
-python scripts/baseline_run.py
+make data
 ```
 
-This saves raw data to `data/raw/qqq_raw.csv` and writes a baseline report to `reports/baseline_results.md`.
+This saves raw data to `data/raw/` and processed data with market features to `data/processed/`.
 
 ### Step 3: Train the Model
 
@@ -219,9 +219,9 @@ pip install -e .
 
 ### No data file found
 
-Run the baseline script to download data before training or predicting:
+Run the data pipeline before training or predicting:
 ```bash
-python scripts/baseline_run.py
+make data
 ```
 
 ### Pre-commit hook failures

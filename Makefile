@@ -1,4 +1,4 @@
-.PHONY: install dev data train predict test lint format clean docker_build docker_run docs
+.PHONY: install dev data train predict backtest full test lint format clean docker_build docker_run docs regime-help
 
 # Note: 'uv' is a faster alternative to pip. Install with: pip install uv
 # Then replace 'pip install' with 'uv pip install' in the commands below.
@@ -20,6 +20,19 @@ train:
 
 predict:
 	python -m finance_forecaster.predict_model
+
+backtest:
+	python -m tests.regime_aware_backtest
+
+full:
+	@echo "Starting full pipeline..."
+	@$(MAKE) data
+	@$(MAKE) train
+	@$(MAKE) backtest
+	@echo "Pipeline complete. Check reports/ for outputs."
+
+regime-help:
+	python -c "print(open('reports/ensemble_regimes_explanation.txt').read())"
 
 test:
 	pytest tests/

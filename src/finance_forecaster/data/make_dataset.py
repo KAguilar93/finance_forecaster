@@ -21,6 +21,16 @@ Output files:
 import logging
 import subprocess
 from pathlib import Path
+import pandas as pd
+import numpy as np
+import yfinance as yf
+import subprocess
+
+logger = logging.getLogger(__name__)
+
+# Directory paths for raw backups and processed data
+RAW_DIR = Path("data/raw")
+PROCESSED_DIR = Path("data/processed")
 
 import numpy as np
 import pandas as pd

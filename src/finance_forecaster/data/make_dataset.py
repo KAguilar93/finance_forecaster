@@ -7,10 +7,15 @@ This module implements a complete data pipeline:
 - Merges and processes data for model training
 
 DVC Workflow:
-1. Pull existing data from Google Drive (fast, cached)
-2. Download only missing data from Yahoo Finance (if needed)
-3. Process and merge into training dataset
-4. Push new data to Google Drive if downloaded
+1. Pull existing data from Google Drive (fast cache)
+2. Download missing data from Yahoo Finance (if needed)
+3. Process and merge into training datasets
+
+Output files:
+- data/raw/qqq_raw.csv: Raw QQQ prices and volume
+- data/raw/market_features.csv: Raw external market features
+- data/processed/qqq_processed.csv: Merged QQQ + features with log returns
+- data/processed/market_features_processed.csv: Processed market features copy
 """
 
 import logging
@@ -31,7 +36,7 @@ def download_stock_data(ticker="QQQ", start="2015-01-01", end="2026-05-15"):
     Download historical stock price and volume data from Yahoo Finance.
     
     Handles yfinance quirks:
-    - MultiIndex columns when downloading certain tickers
+    - MultiIndex columns for certain tickers
     - Automatic adjustment for stock splits and dividends
     
     Args:
@@ -40,7 +45,7 @@ def download_stock_data(ticker="QQQ", start="2015-01-01", end="2026-05-15"):
         end (str): End date in YYYY-MM-DD format
     
     Returns:
-        pd.DataFrame: DataFrame with columns 'price' and 'volume', indexed by date
+        pd.DataFrame: DataFrame with 'price' (close) and 'volume', indexed by date
     """
     logger.info(f"Downloading main ticker: {ticker}")
     # Download with auto_adjust to handle stock splits and dividends automatically
@@ -55,9 +60,9 @@ def download_stock_data(ticker="QQQ", start="2015-01-01", end="2026-05-15"):
         close = data['Close']
         volume = data['Volume']
     
-    # Create clean dataframe with standardized column names
+    # Create clean DataFrame with standardized column names
     df = pd.DataFrame({"price": close, "volume": volume})
-    # Remove any rows with missing data
+    # Remove rows with missing data
     df.dropna(inplace=True)
     return df
 
@@ -75,9 +80,10 @@ def download_external_market_features(start="2015-01-01", end="2026-05-15"):
     - Commodities: GLD (gold)
     
     Engineered features (relative strength ratios):
-    - Market breadth: IWM/SPY, XLK/SPY, XLI/SPY
-    - Sector rotation: XLY/XLP, XLK/XLP, XLF/SPY
-    - Risk appetite: HYG/TLT (credit spreads), GLD/SPY
+    - Market breadth: IWM/SPY (small vs large caps), XLK/SPY (tech strength)
+    - Sector rotation: XLY/XLP (growth vs defensive), XLK/XLP (tech vs staples)
+    - Risk indicators: XLF/SPY (financial health), XLI/SPY (industrial health)
+    - Risk appetite: HYG/TLT (credit spreads), GLD/SPY (safe-haven demand)
     
     Args:
         start (str): Start date in YYYY-MM-DD format
@@ -112,7 +118,7 @@ def download_external_market_features(start="2015-01-01", end="2026-05-15"):
         feature_data[f"{name}_close"] = close
         feature_data[f"{name}_return"] = np.log(close).diff()
     
-    # Remove rows with any missing values
+    # Remove rows with any missing values before feature engineering
     feature_data.dropna(inplace=True)
     
     # === FEATURE ENGINEERING: Relative Strength Ratios ===
@@ -120,20 +126,34 @@ def download_external_market_features(start="2015-01-01", end="2026-05-15"):
     # Ratio > 1 indicates strength in numerator asset class
     
     # Market breadth: small caps (IWM) vs large caps (SPY)
+    # Rising ratio: risk appetite, falling ratio: risk-off
     feature_data["iwm_spy_relative_strength"] = feature_data["iwm_close"] / feature_data["spy_close"]
-    # Tech sector strength
+    
+    # Tech sector (XLK) vs broad market (SPY) - growth indicator
     feature_data["qqq_spy_market_strength"] = feature_data["xlk_close"] / feature_data["spy_close"]
-    # Tech (XLK) vs Consumer Staples (XLP): growth vs defensive
+    
+    # Tech (XLK) vs Consumer Staples (XLP): growth vs defensive rotation
+    # Rising: growth environment, Falling: defensive/recessionary
     feature_data["tech_vs_staples"] = feature_data["xlk_close"] / feature_data["xlp_close"]
+    
     # Consumer Discretionary vs Staples: economic optimism indicator
+    # Rising: optimism, Falling: pessimism or slowdown
     feature_data["discretionary_vs_staples"] = feature_data["xly_close"] / feature_data["xlp_close"]
+    
     # Financials sector strength relative to market
+    # Indicator of banking system health and lending conditions
     feature_data["financials_vs_market"] = feature_data["xlf_close"] / feature_data["spy_close"]
+    
     # Industrials sector strength (economic health indicator)
+    # Rising: strong economic growth, Falling: slowdown
     feature_data["industrials_vs_market"] = feature_data["xli_close"] / feature_data["spy_close"]
+    
     # Credit risk appetite: high-yield bonds vs safe Treasuries (spread proxy)
+    # Rising: investors take risk, Falling: flight to safety
     feature_data["credit_risk_appetite"] = feature_data["hyg_close"] / feature_data["tlt_close"]
+    
     # Gold strength: safe-haven demand indicator
+    # Rising: risk-off environment, Falling: risk-on environment
     feature_data["gold_vs_market"] = feature_data["gld_close"] / feature_data["spy_close"]
     
     return feature_data
@@ -145,86 +165,73 @@ def process_data():
     
     Workflow:
     1. Create directories (data/raw, data/processed)
-    2. Attempt to pull data from Google Drive via DVC (cache)
-    3. Download missing data from Yahoo Finance (if needed)
-    4. Merge datasets and create final training file
-    5. Push new data to Google Drive if downloaded
+    2. Attempt to pull data from Google Drive via DVC (cache optimization)
+    3. Download missing data from Yahoo Finance (fallback)
+    4. Merge datasets and create final training files
     
-    DVC Optimization:
-    - Tracks whether new data was downloaded
-    - Only pushes to Google Drive if new data was created
-    - Speeds up subsequent runs by using cached data
+    Files created:
+    - qqq_raw.csv: Cache of QQQ prices (never overwritten)
+    - market_features.csv: Cache of market indicators (never overwritten)
+    - qqq_processed.csv: Merged dataset with engineered features + log returns
+    - market_features_processed.csv: Copy of market features for reference
     """
-    # Create output directories
+    # Create output directories if they don't exist
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Track if we downloaded new data (determines if we push to Google Drive)
-    data_was_downloaded = False
-
     # === DVC PULL: Retrieve cached data from Google Drive ===
-    # This is fast since data is already processed and stored
+    # This is fast since data is already processed and stored remotely
     logger.info("Checking Google Drive for data...")
     try:
         # Quietly pull data from DVC remote (Google Drive)
         subprocess.run(["dvc", "pull", "--quiet"], check=True)
         logger.info("Data pulled from Google Drive")
     except Exception:
-        # No data available on Google Drive, will download fresh
+        # DVC pull failed or no data available; will download fresh data
         logger.info("No data on Google Drive. Downloading fresh...")
-        data_was_downloaded = True
 
     # === DOWNLOAD MISSING DATA ===
-    # Download QQQ if not already cached
+    # Download QQQ if not already cached (first run or cache miss)
     if not (RAW_DIR / "qqq_raw.csv").exists():
         df = download_stock_data()
         df.to_csv(RAW_DIR / "qqq_raw.csv")
         logger.info("Downloaded qqq_raw.csv")
-        data_was_downloaded = True
 
     # Download market features if not already cached
     if not (RAW_DIR / "market_features.csv").exists():
         market_df = download_external_market_features()
         market_df.to_csv(RAW_DIR / "market_features.csv")
         logger.info("Downloaded market_features.csv")
-        data_was_downloaded = True
 
-    # === CREATE PROCESSED DATASET ===
-    # Merge raw data and create final training file
+    # === CREATE PROCESSED MAIN DATASET ===
+    # Merge raw QQQ with market features, engineer final training dataset
     if not (PROCESSED_DIR / "qqq_processed.csv").exists():
         # Load raw data files
         qqq = pd.read_csv(RAW_DIR / "qqq_raw.csv", index_col=0, parse_dates=True)
         market = pd.read_csv(RAW_DIR / "market_features.csv", index_col=0, parse_dates=True)
         
-        # Left join: preserve all QQQ dates; fill forward market features
+        # Left join: preserve all QQQ dates; forward fill market features for any gaps
         df = qqq.join(market, how="left").ffill()
         
-        # Create target variable: log returns (used by GARCH, LSTM, evaluation)
+        # Create target variable: log returns (used by GARCH, LSTM, backtesting)
+        # log_return = log(price_t) - log(price_t-1)
         df["log_return"] = np.log(df["price"]).diff()
-        # Remove rows with NaN (from join and diff operations)
+        
+        # Remove rows with NaN (from join operations and diff)
         df.dropna(inplace=True)
         
-        # Save final processed dataset
+        # Save final processed dataset for model training
         df.to_csv(PROCESSED_DIR / "qqq_processed.csv")
-        logger.info(f"Created processed file with {len(df)} rows")
-        data_was_downloaded = True
+        logger.info(f"Created qqq_processed.csv ({df.shape[0]} rows)")
 
-    # === DVC PUSH: Save new data to Google Drive ===
-    # Only push if we downloaded new data (optimization)
-    if data_was_downloaded:
-        try:
-            logger.info("Pushing new data to Google Drive via DVC...")
-            # Add data directories to DVC tracking
-            subprocess.run(["dvc", "add", "data/raw", "data/processed"], check=True)
-            # Push to remote (Google Drive)
-            subprocess.run(["dvc", "push", "--quiet"], check=True)
-            logger.info("Successfully pushed new data to Google Drive")
-        except Exception as e:
-            # DVC push failure (not fatal; data is still local)
-            logger.warning(f"DVC push failed: {e}")
-    else:
-        # No new data downloaded; using existing cached data from Google Drive
-        logger.info("No new data to push. Using existing data from Google Drive.")
+    # === CREATE MARKET FEATURES REFERENCE FILE ===
+    # Save processed version of market features for analysis/reference
+    if not (PROCESSED_DIR / "market_features_processed.csv").exists():
+        # Load market features from raw
+        market = pd.read_csv(RAW_DIR / "market_features.csv", index_col=0, parse_dates=True)
+        # Save to processed folder for easy reference
+        market.to_csv(PROCESSED_DIR / "market_features_processed.csv")
+        logger.info("Created market_features_processed.csv")
 
     logger.info("Data pipeline complete")
 

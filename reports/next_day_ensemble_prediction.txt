@@ -1,0 +1,4 @@
+=== NEXT DAY ENSEMBLE PREDICTION ===
+Current Regime       : low_vol_uptrend
+Ensemble Prob UP     : 0.3500
+Recommendation       : SELL / SHORT

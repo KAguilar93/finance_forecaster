@@ -142,6 +142,9 @@ mlruns/
 # Application logs
 logs/
 
+# Generated prediction outputs (change every run)
+predictions/*.csv
+
 # IDEs
 .vscode/
 .idea/

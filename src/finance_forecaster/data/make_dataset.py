@@ -219,7 +219,7 @@ def process_data() -> None:
     # Merge raw QQQ with market features, engineer final training dataset
     if not (PROCESSED_DIR / "qqq_processed.csv").exists():
         # Load raw data files
-        qqq = pd.read_csv(RAW_DIR / "qqq_raw.csv", index_col=0, parse_dates=True)
+        qqq = pd.read_csv(RAW_DIR / "qqq_raw.csv", index_col=0, parse_dates=True, skiprows=[1, 2])
         market = pd.read_csv(RAW_DIR / "market_features.csv", index_col=0, parse_dates=True)
 
         # Left join: preserve all QQQ dates; forward fill market features for any gaps

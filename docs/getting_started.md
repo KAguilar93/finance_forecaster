@@ -210,6 +210,24 @@ python -m finance_forecaster.train_model --arima-p 2 --arima-d 0 --arima-q 2
 python -m finance_forecaster.train_model --test-split 0.15
 ```
 
+## Cleaning Generated Files
+
+Remove logs, MLflow runs, predictions, and cache files:
+
+```bash
+python scripts/clean.py
+# or
+make clean
+```
+
+Full clean — also removes `data/processed/`, `models/`, and `reports/` outputs:
+
+```bash
+python scripts/clean.py --all
+# or
+make clean-all
+```
+
 ## Troubleshooting
 
 ### Import Errors

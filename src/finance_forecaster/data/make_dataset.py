@@ -21,10 +21,10 @@ Output files:
 import logging
 import subprocess
 from pathlib import Path
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 import yfinance as yf
-import subprocess
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +32,6 @@ logger = logging.getLogger(__name__)
 RAW_DIR = Path("data/raw")
 PROCESSED_DIR = Path("data/processed")
 
-import numpy as np
-import pandas as pd
-import yfinance as yf
 
 logger = logging.getLogger(__name__)
 
@@ -229,7 +226,7 @@ def process_data() -> None:
     # Merge raw QQQ with market features, engineer final training dataset
     if not (PROCESSED_DIR / "qqq_processed.csv").exists():
         # Load raw data files
-        qqq = pd.read_csv(RAW_DIR / "qqq_raw.csv", index_col=0, parse_dates=True)
+        qqq = pd.read_csv(RAW_DIR / "qqq_raw.csv", index_col=0, parse_dates=True, skiprows=[1, 2])
         market = pd.read_csv(RAW_DIR / "market_features.csv", index_col=0, parse_dates=True)
 
         # Left join: preserve all QQQ dates; forward fill market features for any gaps

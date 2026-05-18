@@ -39,13 +39,16 @@ format:
 	ruff format .
 
 clean:
-	rm -rf data/processed/*.csv reports/*.csv reports/figures/*.png reports/*.txt models/*.pkl
+	python scripts/clean.py
 
-help:
-	@echo "Available commands:"
-	@echo "  make data          → Download and process data"
-	@echo "  make train         → Train ARIMA, GARCH, LSTM"
-	@echo "  make backtest      → Run regime-aware backtest + next day prediction"
-	@echo "  make full          → Run everything in order (recommended)"
-	@echo "  make regime-help   → Show regime explanation"
-	@echo "  make clean         → Remove generated files"
+clean-all:
+	python scripts/clean.py --all
+
+docker_build:
+	docker build -t finance_forecaster -f dockerfiles/Dockerfile .
+
+docker_run:
+	docker run --rm finance_forecaster
+
+docs:
+	mkdocs serve

@@ -51,7 +51,7 @@ docker_build:
 	docker build -f dockerfiles/backtest.dockerfile . -t finance_forecaster_backtest:latest
 
 docker_run:
-	docker compose up
+	docker compose up --build
 
 docs:
 	mkdocs serve

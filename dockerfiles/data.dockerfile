@@ -16,4 +16,4 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 RUN pip install . --no-deps --no-cache-dir
 
 
-ENTRYPOINT ["python", "-u", "-m", "finance_forecaster.predict_model"]
+ENTRYPOINT ["python", "-u", "-m", "finance_forecaster.data.make_dataset"]

@@ -1,15 +1,43 @@
-version: '3.8'
+volumes:
+            finance_forecaster_volume:
+
+networks:
+            finance_forecaster_network:
 
 services:
-  finance_forecaster:
+  finance_forecaster_make_data:
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile
-    container_name: finance_forecaster_app
+      dockerfile: dockerfiles/data.dockerfile
+    container_name: finance_forecaster_data
     volumes:
-      - ./data:/app/data
-      - ./models:/app/models
-    environment:
-      - PYTHONUNBUFFERED=1
-    ports:
-      - "8000:8000"
+      - finance_forecaster_volume:/app
+    networks:
+      - "finance_forecaster_network"
+
+
+  finance_forecaster_train_model:
+    build:
+      context: .
+      dockerfile: dockerfiles/train.dockerfile
+    container_name: finance_forecaster_trainer
+    volumes:
+      - finance_forecaster_volume:/app
+    networks:
+      - "finance_forecaster_network"
+    depends_on:
+        finance_forecaster_make_data:
+            condition: service_completed_successfully
+
+  finance_forecaster_predict:
+    build:
+      context: .
+      dockerfile: dockerfiles/predict.dockerfile
+    container_name: finance_forecaster_predicter
+    volumes:
+      - finance_forecaster_volume:/app
+    networks:
+      - "finance_forecaster_network"
+    depends_on:
+        finance_forecaster_train_model:
+            condition: service_completed_successfully

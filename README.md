@@ -13,7 +13,7 @@ Finance Forecasting ML Model Pipeline -- Predicting Next Day Financial Movements
 
 ## Project Overview
 
-finance_forecaster is a machine learning project that implements a Finance Forecasting ML Model Pipeline that aims to predict Next Day Financial Movements by using time-series analysis. Additionally, we are building a pipeline around our model to enable continuous training with fresh data, continuous integration of model improvements, and continuous delivery of prediction services while maintaining traceable and reproducible experiments for validation and verification of our models performance. We are aiming for our model and pipeline to provide 60% accuracy of next day financial movements.\
+finance_forecaster is a machine learning project that implements a Finance Forecasting ML Model Pipeline that aims to predict Next Day Financial Movements by using time-series analysis. Additionally, we are building a pipeline around our model to enable continuous training with fresh data, continuous integration of model improvements, and continuous delivery of prediction services while maintaining traceable and reproducible experiments for validation and verification of our models performance. We are aiming for our model and pipeline to provide 55% accuracy of next day financial movements.\
 
 See [Phase 1 Project Proposal](docs/PHASE1.md) for the full project proposal and deliverable documentation.
 

@@ -18,7 +18,7 @@ finance_forecaster is a machine learning project that implements a Finance Forec
 See [Phase 1 Project Proposal](docs/PHASE1.md) for the full project proposal and deliverable documentation.
 
 **Key Objectives:**
-- [ ] Provide Next Day Finance Movement Preditions with ~60% Accuracy
+- [ ] Provide Next Day Finance Movement Preditions with ~55% Accuracy
 - [ ] Automated Continuous Training, Integration, and Delivery of Prediction Services in a Portable Environment
 - [ ] Maintain Traceability and Reproducibility of Model Predictions and Experiments for Third-Party Validation
 

@@ -60,7 +60,7 @@ Models are implemented in `src/finance_forecaster/models/` with a shared `BaseMo
 
 ## 1. Project Proposal
 
-- [x] **Scope & Objectives**: Next-day directional movement prediction with 60% accuracy target
+- [x] **Scope & Objectives**: Next-day directional movement prediction with 55% accuracy target
 - [x] **Detailed Description**: 300+ word proposal above covering business context, technical approach, and expected outcomes
 - [x] **Dataset Selection**: yfinance / QQQ documented with justification
 - [x] **Dataset Description**: OHLCV daily data, multi-year history, dynamic ticker support

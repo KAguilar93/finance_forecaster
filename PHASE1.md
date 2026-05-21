@@ -28,12 +28,12 @@
   - [ ] (Optional) Google Colab setup
 
 ## 3. Version Control & Collaboration
-- [ ] **3.1 Git Usage**
-  - [ ] Regular commits with clear messages
-  - [ ] Branching and pull requests
-- [ ] **3.2 Team Collaboration**
-  - [ ] Roles assigned
-  - [ ] Code reviews and merge conflict resolution
+- [x] **3.1 Git Usage**
+  - [x] Regular commits with clear messages
+  - [x] Branching and pull requests
+- [x] **3.2 Team Collaboration**
+  - [x] Roles assigned
+  - [x] Code reviews and merge conflict resolution
 
 ## 4. Data Handling
 - [X] **4.1 Data Preparation**

@@ -1,0 +1,14 @@
+# Baseline training configuration for Phase 2 Hydra documentation.
+# Mirrors the default ARIMA training command used by train_model.py.
+
+model:
+  type: arima
+
+training:
+  test_split: 0.2
+  arima_p: 1
+  arima_d: 0
+  arima_q: 1
+
+mlflow:
+  experiment_name: finance_forecaster_training

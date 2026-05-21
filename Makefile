@@ -1,25 +1,31 @@
-.PHONY: install dev data train predict test lint format clean docker_build docker_run docs
+.PHONY: install dev data train predict backtest full test lint format clean docker_build docker_run docs regime-help
 
-# Note: 'uv' is a faster alternative to pip. Install with: pip install uv
-# Then replace 'pip install' with 'uv pip install' in the commands below.
+# Default target
+all: full
 
-install:
-	pip install -U pip
-	pip install -r requirements.txt
-	pip install -e .
-
-dev: install
-	pip install -r requirements_dev.txt
-	pre-commit install
-
+# Data pipeline
 data:
 	python -m finance_forecaster.data.make_dataset
 
+# Train models (ARIMA, GARCH, LSTM)
 train:
 	python -m finance_forecaster.train_model
 
 predict:
 	python -m finance_forecaster.predict_model
+
+backtest:
+	python -m tests.regime_aware_backtest
+
+full:
+	@echo "Starting full pipeline..."
+	@$(MAKE) data
+	@$(MAKE) train
+	@$(MAKE) backtest
+	@echo "Pipeline complete. Check reports/ for outputs."
+
+regime-help:
+	python -c "print(open('reports/ensemble_regimes_explanation.txt').read())"
 
 test:
 	pytest tests/
@@ -33,19 +39,19 @@ format:
 	ruff format .
 
 clean:
-	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name .pytest_cache -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name dist -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name build -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name .mypy_cache -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name .ruff_cache -exec rm -rf {} + 2>/dev/null || true
+	python scripts/clean.py
+
+clean-all:
+	python scripts/clean.py --all
 
 docker_build:
-	docker build -t finance_forecaster -f dockerfiles/Dockerfile .
+	docker build -f dockerfiles/data.dockerfile . -t finance_forecaster_data:latest
+	docker build -f dockerfiles/train.dockerfile . -t finance_forecaster_train:latest
+	docker build -f dockerfiles/predict.dockerfile . -t finance_forecaster_predict:latest
+	docker build -f dockerfiles/backtest.dockerfile . -t finance_forecaster_backtest:latest
 
 docker_run:
-	docker run --rm finance_forecaster
+	docker compose up --build
 
 docs:
 	mkdocs serve

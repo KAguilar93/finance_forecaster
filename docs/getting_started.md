@@ -47,8 +47,8 @@ pip install -r requirements.txt
 ### Step 4: Set Up Development Environment
 
 ```bash
-# Install development dependencies
-pip install -r requirements_dev.txt
+# Install package in editable mode (includes dev tools)
+pip install -e ".[dev]"
 
 # Install pre-commit hooks
 pre-commit install
@@ -59,46 +59,50 @@ pytest tests/
 
 ## Running the Project
 
-### Data Processing
+### Data Download
 
-Prepare your data for model training:
+Download QQQ and market feature data from yfinance (tries DVC/Google Drive cache first):
 
 ```bash
 make data
 ```
 
-Or directly:
-
-```bash
-python -m finance_forecaster.data.make_dataset
-```
+This saves raw data to `data/raw/` and processed data to `data/processed/`.
 
 ### Model Training
 
-Train the machine learning model:
+Train an ARIMA or LSTM model and log the run to MLflow:
 
 ```bash
 make train
+# or with custom parameters:
+python -m finance_forecaster.train_model --arima-p 1 --arima-d 0 --arima-q 1
 ```
 
-With custom parameters:
+### Backtest
+
+Run the regime-aware ensemble backtest and generate prediction outputs:
 
 ```bash
-python -m finance_forecaster.train_model --epochs 100 --batch-size 64
+make backtest
+```
+
+Outputs: `reports/next_day_ensemble_prediction.txt`, `reports/trade_performance.txt`, `reports/figures/`
+
+### Run Full Pipeline
+
+Run data → train → backtest in one command:
+
+```bash
+make full
 ```
 
 ### Model Prediction
 
-Generate predictions on new data:
+Generate next-day directional predictions:
 
 ```bash
-make predict
-```
-
-With custom inputs:
-
-```bash
-python -m finance_forecaster.predict_model --model-path models/model.pkl --input data/test.csv
+python -m finance_forecaster.predict_model --input data/raw/qqq_raw.csv --output predictions/predictions.csv
 ```
 
 ## Development Workflow
@@ -196,23 +200,32 @@ finance_forecaster/                  # Repository root
 ## Configuration
 
 ### Using Hydra Configuration
-Configuration is managed via Hydra. Edit `configs/config.yaml`:
-
-```yaml
-model:
-  name: my_model
-  type: sklearn
-training:
-  epochs: 100
-  batch_size: 32
-```
-
-Override at runtime:
+Configuration defaults live in `configs/config.yaml` and cover model, data, training, logging, and MLflow settings. The training CLI uses argparse for direct overrides:
 
 ```bash
-python -m finance_forecaster.train_model \
-  model.name=custom_model \
-  training.epochs=200
+# Train with a different ARIMA order
+python -m finance_forecaster.train_model --arima-p 2 --arima-d 0 --arima-q 2
+
+# Change the train/test split
+python -m finance_forecaster.train_model --test-split 0.15
+```
+
+## Cleaning Generated Files
+
+Remove logs, MLflow runs, predictions, and cache files:
+
+```bash
+python scripts/clean.py
+# or
+make clean
+```
+
+Full clean — also removes `data/processed/`, `models/`, and `reports/` outputs:
+
+```bash
+python scripts/clean.py --all
+# or
+make clean-all
 ```
 
 ## Troubleshooting
@@ -223,18 +236,6 @@ If you get `ModuleNotFoundError`, ensure:
 1. Virtual environment is activated
 2. Dependencies are installed: `pip install -r requirements.txt`
 3. Package is installed in editable mode: `pip install -e .`
-
-### CUDA/GPU Issues
-
-If using PyTorch with GPU:
-
-```bash
-# Check GPU availability
-python -c "import torch; print(torch.cuda.is_available())"
-
-# Install CPU-only version if needed
-pip install torch --index-url https://download.pytorch.org/whl/cpu
-```
 
 ### Pre-commit Hook Failures
 

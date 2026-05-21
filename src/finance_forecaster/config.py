@@ -39,11 +39,21 @@ class DataConfig:
 
 
 @dataclass(frozen=True)
+class MLflowConfig:
+    """MLflow experiment tracking settings."""
+
+    tracking_uri: str = "mlruns"
+    experiment_name: str = "finance_forecaster_training"
+    system_metrics: bool = True
+
+
+@dataclass(frozen=True)
 class Config:
     """Top-level configuration composing sub-configs."""
 
     training: TrainingConfig = field(default_factory=TrainingConfig)
     data: DataConfig = field(default_factory=DataConfig)
+    mlflow: MLflowConfig = field(default_factory=MLflowConfig)
 
 
 DEFAULT_CONFIG = Config()

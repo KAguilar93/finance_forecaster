@@ -12,7 +12,7 @@ COPY src/ src/
 COPY data/ data/
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install -r requirements.txt --no-cache-dir --user 
+    pip install -r requirements.txt
 RUN pip install . --no-deps --no-cache-dir
 
 

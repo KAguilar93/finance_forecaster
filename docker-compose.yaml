@@ -1,3 +1,5 @@
+name: Finance_Forecaster
+
 volumes:
             finance_forecaster_volume:
 
@@ -40,4 +42,17 @@ services:
       - "finance_forecaster_network"
     depends_on:
         finance_forecaster_train_model:
+            condition: service_completed_successfully
+
+  finance_forecaster_backtest:
+    build:
+      context: .
+      dockerfile: dockerfiles/backtest.dockerfile
+    container_name: finance_forecaster_backtest
+    volumes:
+      - finance_forecaster_volume:/app
+    networks:
+      - "finance_forecaster_network"
+    depends_on:
+        finance_forecaster_predict:
             condition: service_completed_successfully

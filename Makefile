@@ -45,14 +45,12 @@ clean-all:
 	python scripts/clean.py --all
 
 docker_build:
-	docker build -f dockerfiles/train.dockerfile . -t finance_forecaster_train:v1
-	docker build -f dockerfiles/predict.dockerfile -t finance_forecaster_predict:v1
+	docker build -f dockerfiles/data.dockerfile . -t finance_forecaster_data:latest
+	docker build -f dockerfiles/train.dockerfile . -t finance_forecaster_train:latest
+	docker build -f dockerfiles/predict.dockerfile . -t finance_forecaster_predict:latest
+	docker build -f dockerfiles/backtest.dockerfile . -t finance_forecaster_backtest:latest
 
 docker_run:
-	docker run --rm --name finance_forecaster_train trainer:v1
-	docker run --rm --name finance_forecaster_predict predicter:v1
-
-docker_compose:
 	docker compose up
 
 docs:

@@ -327,7 +327,7 @@ the core concepts and mechanisms behind each portion of the model and pipeline.
 
 While our entire team aided and assisted each other on the various aspects of the project it can
 be said that:\
-Shang Andrews led: Data pipeline construction, profiling, configuration management\
+Shang Andrews led: Data pipeline construction, environment management, profiling, and configuration management\
 James Russo led: Data identification and cleaning, feature engineering, model development and fine tuning\
 Joseph Hughes led: Pipeline architecture, experiment tracking and logging, monitoring and debugging\
 Kevin Aguilar led: Project structure and git branching strategies, containerization, and documentation

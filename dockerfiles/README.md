@@ -12,10 +12,14 @@ Store Docker configurations and container setup files here.
 
 ```bash
 # Build image
-docker compose build (--no-cache) --> builds all the containers and mounts a shared volume and network [no-cache flag is optional if you want to force a new build not from cached layers]
+docker compose build (--no-cache) --> builds all the containers and mounts a shared volume and network
+                                      [no-cache flag is optional if you want to force a new build
+                                      without cached layers]
 
 # Run container
-docker compose up (--build) --> runs the containerized prediction pipeline, will also build the containers if they haven't been [--build flag is optional if you want to force a rebuild of containers]
+docker compose up (--build)       --> runs the containerized prediction pipeline,
+                                      will also build the containers if they haven't been
+                                      [--build flag is optional if you want to force a rebuild of containers]
 ```
 
 ## Phase

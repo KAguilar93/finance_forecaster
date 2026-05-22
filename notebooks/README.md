@@ -1,16 +1,5 @@
 # Notebooks Directory
 
-Store Jupyter notebooks for exploration, analysis, and experimentation here.
+#Link to notebook
 
-## Naming Convention
-
-Use the format: `<step>-<author>-<description>.ipynb`
-
-Example: `1.0-vahid-data-exploration.ipynb`
-
-## Guidelines
-
-- Use notebooks for **exploration and analysis**, not production code
-- Refactor reusable code into the `finance_forecaster/` package
-- Keep notebooks clean and well-commented for team understanding
-- Number notebooks sequentially to show workflow progression
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/KAguilar93/finance_forecaster/blob/pipeline-update-notebook/notebooks/finance_forecaster_notebook.ipynb)

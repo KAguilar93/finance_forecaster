@@ -325,10 +325,10 @@ touch and collaborate on each portion of the project. In order to better underst
 the core concepts and mechanisms behind each portion of the model and pipeline.
 
 While our entire team aided and assisted each other on the various aspects of the project it can
-be said that:
-Shang Andrews led: Data pipeline construction, profiling, configuration management
-James Russo led: Data identification and cleaning, feature engineering, model development and fine tuning
-Joseph Hughes led: Pipeline architecture, experiment tracking and logging, monitoring and debugging 
+be said that:\
+Shang Andrews led: Data pipeline construction, profiling, configuration management\
+James Russo led: Data identification and cleaning, feature engineering, model development and fine tuning\
+Joseph Hughes led: Pipeline architecture, experiment tracking and logging, monitoring and debugging\
 Kevin Aguilar led: Project structure and git branching strategies, containerization, and documentation
 
 ## References

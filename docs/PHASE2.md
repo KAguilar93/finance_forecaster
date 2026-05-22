@@ -53,9 +53,16 @@ commands, and running our model locally with a virtual environment enabled. Key 
 the prediction pipeline was run the results were the same, pointing towards and supporting reproducibility.
 (Which is why the screenshots all look the same but they were executed independently with different commands.)
 
+Results of running 'docker compose up --build' to force a new build:
 ![Results of running 'docker compose up --build' to force a new build](screenshots/docker%20compose%20up%20build%20results.png)
+
+Results of 'docker compose up' with prebuilt images:
 ![Results of 'docker compose up' with prebuilt images](screenshots/docker%20compose%20up%20results.png)
+
+Results of running make docker_run to run full docker pipeline
 ![Results of running make docker_run to run full docker pipeline](screenshots/local%20make%20docker_run%20run%20with%20venv.png)
+
+Results of prediction pipeline using an activated virtual environment and make full command:
 ![Results of prediction pipeline using an activated virtual environment and make full command](screenshots/local%20make%20full%20run%20with%20venv.png)
 
 ## Challenges and Solutions

@@ -50,5 +50,8 @@ docker_build:
 docker_run:
 	docker compose up
 
+docker_clean:
+	docker compose down
+
 docs:
 	mkdocs serve

@@ -81,7 +81,8 @@ pytest tests/
 ### Running the Pipeline
 
 ```bash
-#Run the entire pipeline inside containers (Both automatically build and run the containers with our pipeline)
+#Run the entire pipeline inside containers
+(Both automatically build and run the containers with our pipeline)
 make docker_run
 or
 docker compose up

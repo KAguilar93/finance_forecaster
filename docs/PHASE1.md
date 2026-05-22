@@ -172,11 +172,34 @@ python -m finance_forecaster.predict_model --input data/raw/qqq_raw.csv --output
 
 Expected output:
 ```
-INFO  Loaded 2513 trading days
-INFO  Running ARIMA(1,0,1) rolling forecast over 30 days...
-INFO  Next-day forecast: 0.1863% -> UP
-INFO  Rolling window accuracy (30 days): 53.3%
-INFO  Next trading day prediction: UP (0.1863%)
+
+Loaded processed data: (2855, 37)
+
+Running Ensemble (ARIMA + GARCH + LSTM) + Regime-Aware Backtest...
+
+
+=== NEXT DAY ENSEMBLE PREDICTION ===
+
+Current Regime       : low_vol_uptrend
+
+Ensemble Prob UP     : 0.9000
+
+Recommendation       : BUY - STRONG UP
+
+
+=== TRADE PERFORMANCE ===
+
+Total Trades Taken   : 1261
+
+Hit Rate (Accuracy)  : 57.1%
+
+TRADE ACCURACY IS 55% OR GREATER
+
+Trade performance saved to: reports/trade_performance.txt
+
+Next day prediction saved to: reports/next_day_ensemble_prediction.txt
+
+Equity curve saved to reports/figures/ensemble_regime_backtest.png
 ```
 
 ### Step 5: Run Tests

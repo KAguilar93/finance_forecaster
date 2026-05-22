@@ -136,10 +136,12 @@ Models are implemented in `src/finance_forecaster/models/` with a shared `BaseMo
 - Git
 - Virtual environment activated (see [Getting Started](getting_started.md))
 
-### Step 1: Install Dependencies
+### Step 1: Install Dependencies & Start Virtual Environment
 
 ```bash
-pip install -e ".[dev]"
+uv sync
+.\.venv\Scripts\activate  ->> Windows
+source .venv/bin/activate ->> Linux/Apple
 ```
 
 ### Step 2: Download Data

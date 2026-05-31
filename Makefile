@@ -45,13 +45,13 @@ clean-all:
 	python scripts/clean.py --all
 
 docker_build:
-	docker build -f dockerfiles/data.dockerfile . -t finance_forecaster_data:latest
-	docker build -f dockerfiles/train.dockerfile . -t finance_forecaster_train:latest
-	docker build -f dockerfiles/predict.dockerfile . -t finance_forecaster_predict:latest
-	docker build -f dockerfiles/backtest.dockerfile . -t finance_forecaster_backtest:latest
+	docker compose build
 
 docker_run:
-	docker compose up --build
+	docker compose up
+
+docker_clean:
+	docker compose down
 
 docs:
 	mkdocs serve

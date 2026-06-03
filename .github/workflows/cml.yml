@@ -29,6 +29,8 @@ jobs:
         run: dvc pull || echo "DVC pull failed or skipped, make full will fetch fresh data"
 
       - name: Run training pipeline
+        env:
+          MLFLOW_ALLOW_FILE_STORE: "true"
         run: make full
 
       - name: Upload equity curve

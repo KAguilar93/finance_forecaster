@@ -23,12 +23,6 @@ jobs:
       - name: Install dependencies
         run: pip install -e ".[dev]"
 
-      - name: Install system dependencies for CML
-        run: sudo apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
-
-      - name: Set up CML
-        uses: iterative/setup-cml@v2
-
       - name: Configure DVC remote (Google Drive)
         env:
           GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
@@ -43,9 +37,15 @@ jobs:
       - name: Run training pipeline
         run: make full
 
-      - name: Generate CML report
+      - name: Upload equity curve
+        uses: actions/upload-artifact@v4
+        with:
+          name: equity-curve
+          path: reports/figures/ensemble_regime_backtest.png
+
+      - name: Post training report as PR comment
         env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "## Model Training Report" >> report.md
           echo "" >> report.md
@@ -62,5 +62,5 @@ jobs:
           echo '```' >> report.md
           echo "" >> report.md
           echo "### Equity Curve" >> report.md
-          cml publish reports/figures/ensemble_regime_backtest.png --md >> report.md
-          cml comment create report.md
+          echo "See the equity curve in the [workflow artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})." >> report.md
+          gh pr comment ${{ github.event.pull_request.number }} --body-file report.md

@@ -13,15 +13,12 @@ Finance Forecasting ML Model Pipeline -- Predicting Next Day Financial Movements
 
 ## Project Overview
 
-finance_forecaster is a machine learning project that implements a Finance Forecasting ML Model Pipeline that aims to predict Next Day Financial Movements by using time-series analysis. Additionally, we are building a pipeline around our model to enable continuous training with fresh data, continuous integration of model improvements, and continuous delivery of prediction services while maintaining traceable and reproducible experiments for validation and verification of our models performance. We are aiming for our model and pipeline to provide 55% accuracy of next day financial movements.\
+finance_forecaster is a machine learning project that implements a Finance Forecasting ML Model Pipeline that aims to predict Next Day Financial Movements by using time-series analysis. Additionally, we are building a pipeline around our model to enable continuous training with fresh data, continuous integration of model improvements, and continuous delivery of prediction services while maintaining traceable and reproducible experiments for validation and verification of our models performance. We are aiming for our model and pipeline to provide 60% accuracy of next day financial movements.\
 
-See [Phase 1 Project Proposal](docs/PHASE1.md) for the full project proposal, deliverable documentation, in depth and alternative
-installation instructions.\
-See [Phase 2 Project Instructions](docs/PHASE2.md) for full instructions on running our containerized pipeline, profiling, logging,
-debugging samples, challenges & solutions, and key results from our Finance Forecasting Pipeline.
+See [Phase 1 Project Proposal](docs/PHASE1.md) for the full project proposal and deliverable documentation.
 
 **Key Objectives:**
-- [ ] Provide Next Day Finance Movement Preditions with ~55% Accuracy
+- [ ] Provide Next Day Finance Movement Preditions with ~60% Accuracy
 - [ ] Automated Continuous Training, Integration, and Delivery of Prediction Services in a Portable Environment
 - [ ] Maintain Traceability and Reproducibility of Model Predictions and Experiments for Third-Party Validation
 
@@ -49,7 +46,7 @@ debugging samples, challenges & solutions, and key results from our Finance Fore
 - DVC Installed
 - Hydra installed
 - UV installed
-- Docker installed
+- Docker and Docker Compose
 
 ### Installation
 
@@ -81,12 +78,6 @@ pytest tests/
 ### Running the Pipeline
 
 ```bash
-#Run the entire pipeline inside containers
-(Both automatically build and run the containers with our pipeline)
-make docker_run
-or
-docker compose up
-
 # Prepare data (downloads QQQ + market features)
 make data
 
@@ -106,77 +97,40 @@ make predict
 make help
 ```
 
-Expected Output:
-```
-Loaded processed data: (2855, 37)
-
-Running Ensemble (ARIMA + GARCH + LSTM) + Regime-Aware Backtest...
-
-
-=== NEXT DAY ENSEMBLE PREDICTION ===
-
-Current Regime       : low_vol_uptrend
-
-Ensemble Prob UP     : 0.9000
-
-Recommendation       : BUY - STRONG UP
-
-
-=== TRADE PERFORMANCE ===
-
-Total Trades Taken   : 1261
-
-Hit Rate (Accuracy)  : 57.1%
-
-TRADE ACCURACY IS 55% OR GREATER
-
-Trade performance saved to: reports/trade_performance.txt
-
-Next day prediction saved to: reports/next_day_ensemble_prediction.txt
-
-Equity curve saved to reports/figures/ensemble_regime_backtest.png
-Screenshots of running both commands to run entire containerized Forecasting Pipeline
-```
-Sample Commands for running pipeline [from project root folder where docker-compose.yaml and makefile reside]:
-
-![docker compose up](docs/screenshots/docker%20compose%20up%20comand.png)
-![make docker_run](docs/screenshots/make%20docker_run%20comand.png)
-
-
 ## Technology Stack
 
 ### Core Dependencies
-- **numpy** == 2.4.4 - Numerical computing
-- **pandas** == 2.3.3 - Data manipulation
-- **scikit-learn** >= 1.8.0 - Machine learning algorithms
-- **matplotlib** >= 3.10.9 - Visualization
-- **tqdm** >= 4.67.3 - Progress bars
-- **pyyaml** >= 6.0.3 - Configuration files
+- **numpy** >= 1.26.0 - Numerical computing
+- **pandas** >= 2.2.0 - Data manipulation
+- **scikit-learn** >= 1.5.0 - Machine learning algorithms
+- **matplotlib** >= 3.9.0 - Visualization
+- **tqdm** >= 4.66.0 - Progress bars
+- **pyyaml** >= 6.0 - Configuration files
 
 ### Experiment Tracking
-- **mlflow** >= 3.11.1 - MLflow experiment tracking
+- **mlflow** >= 2.16.0 - MLflow experiment tracking
 
 ### Configuration Management
-- **hydra-core** >= 1.3.2 - Hydra configuration framework
+- **hydra-core** >= 1.3.0 - Hydra configuration framework
 - **omegaconf** >= 2.3.0 - Hierarchical configuration
 
 ### Data Version Control
-- **dvc** >= 3.67.1 - Data Version Control
+- **dvc** >= 3.55.0 - Data Version Control
 
 ### Financial Data Sources
-- **yfinance** == 1.3.0
+- **yfinance**
 
 ### Statistical/time-series modeling
-- **statsmodels** == 0.14.6
-- **arch** == 8.0.0
+- **statsmodels**
+- **arch**
 
 ### API
-- **fastapi** == 0.136.1
-- **uvicorn** == 0.46.0
+- **fastapi**
+- **uvicorn**
 
 ### Model persistence / utilities
-- **joblib** ==1.5.3
-- **python-dotenv** ==1.2.2
+- **joblib**
+- **python-dotenv**
 
 ### Development Tools
 - **pytest** >= 8.0 - Testing framework
@@ -292,45 +246,10 @@ make docker_run
 make docs
 ```
 
----
-
-## Troubleshooting
-
-### ModuleNotFoundError
-
-Ensure the package is installed in editable mode:
-```bash
-pip install -e .
-```
-
-### No data file found
-
-Run the data pipeline before training or predicting:
-```bash
-make data
-```
-
-### Pre-commit hook failures
-
-Hooks may auto-fix files on first run — just re-stage and commit again:
-```bash
-git add -A
-git commit -m "your message"
-```
-
----
-
 ## Contribution Summary
 We are taking on a collaborative approach to this project, where each member will
 touch and collaborate on each portion of the project. In order to better understand
 the core concepts and mechanisms behind each portion of the model and pipeline.
-
-While our entire team aided and assisted each other on the various aspects of the project it can
-be said that:\
-Shang Andrews led: Data pipeline construction, environment management, profiling, and configuration management\
-James Russo led: Data identification and cleaning, feature engineering, model development and fine tuning\
-Joseph Hughes led: Pipeline architecture, experiment tracking and logging, monitoring and debugging\
-Kevin Aguilar led: Project structure and git branching strategies, containerization, and documentation
 
 ## References
 
@@ -338,6 +257,32 @@ Kevin Aguilar led: Project structure and git branching strategies, containerizat
 - [Phase 1 — Project Design & Model Development](PHASE1.md)
 - [Phase 2 — Containerization & Monitoring](PHASE2.md)
 - [Phase 3 — CI/CD & Deployment](PHASE3.md)
+
+## Phase 3: CI/CD & Deployment
+
+See [PHASE3.md](PHASE3.md) for the full checklist with evidence.
+
+### Live Services
+- **Hugging Face Space (UI):** https://huggingface.co/spaces/FinanceForecasters/finance-forecaster
+- **Cloud Run API:** *(URL added after deployment — see PHASE3.md Section 3.4)*
+- **Cloud Functions endpoint:** *(URL added after deployment — see PHASE3.md Section 3.3)*
+
+### CI/CD
+[![CI](https://github.com/KAguilar93/finance_forecaster/actions/workflows/ci.yml/badge.svg)](https://github.com/KAguilar93/finance_forecaster/actions/workflows/ci.yml)
+[![Docker Build](https://github.com/KAguilar93/finance_forecaster/actions/workflows/docker-build.yml/badge.svg)](https://github.com/KAguilar93/finance_forecaster/actions/workflows/docker-build.yml)
+
+### New Tools Added in Phase 3
+- CML (Continuous Machine Learning) via `iterative/cml`
+- GCP Artifact Registry, Compute Engine, Cloud Run, Cloud Functions
+- Gradio UI on Hugging Face Spaces
+- Automated Docker Hub and Artifact Registry pushes on every commit to `main`
+
+### Serve the API locally
+```bash
+make serve
+# → http://localhost:8080/health
+# → POST http://localhost:8080/predict  {"ticker": "QQQ"}
+```
 
 ## License
 

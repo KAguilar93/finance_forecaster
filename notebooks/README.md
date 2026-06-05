@@ -1,16 +1,26 @@
-# Notebooks Directory
+# Finance Forecaster Notebook
 
-Store Jupyter notebooks for exploration, analysis, and experimentation here.
+This folder contains the Google Colab notebook used for exploratory modeling and prototyping for the `finance_forecaster` project.
 
-## Naming Convention
+## Open in Google Colab
 
-Use the format: `<step>-<author>-<description>.ipynb`
+[Open the Finance Forecaster Notebook in Google Colab](https://colab.research.google.com/drive/1hC0nUO9n_qM2bYSPM-cj_ibr2iu-C8jE#scrollTo=61f42aa1-5792-4b00-ba8d-0869a393e111)
 
-Example: `1.0-vahid-data-exploration.ipynb`
+## Notes
 
-## Guidelines
+The notebook serves as the research and experimentation workspace for the project. It is used to explore the full forecasting workflow before or alongside modularizing code into the repository.
 
-- Use notebooks for **exploration and analysis**, not production code
-- Refactor reusable code into the `finance_forecaster/` package
-- Keep notebooks clean and well-commented for team understanding
-- Number notebooks sequentially to show workflow progression
+The notebook includes work related to:
+
+- QQQ price data collection
+- External market feature collection
+- Log-return calculation
+- ARIMA-based forecasting
+- GARCH volatility modeling
+- LSTM / LSTM-GARCH experimentation
+- Market regime detection
+- Regime-aware backtesting
+- Trading signal evaluation and visualization
+
+
+

@@ -126,7 +126,7 @@ steps:
       - 'us-central1'
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-   volumes:
+    volumes:
        name: 'finance-forecaster-volume'
        path: '/persistent_volume'
     entrypoint: gcloud
@@ -140,7 +140,7 @@ steps:
       - 'us-central1'
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-   volumes:
+    volumes:
        name: 'finance-forecaster-volume'
        path: '/persistent_volume'
     entrypoint: gcloud
@@ -154,7 +154,7 @@ steps:
       - 'us-central1'
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-   volumes:
+    volumes:
        name: 'finance-forecaster-volume'
        path: '/persistent_volume'
     entrypoint: gcloud

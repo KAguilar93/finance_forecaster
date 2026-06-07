@@ -113,8 +113,8 @@ steps:
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     volumes:
-      name: 'finance-forecaster-volume'
-      path: '/persistent_volume'
+       name: 'finance-forecaster-volume'
+       path: '/persistent_volume'
     entrypoint: gcloud
     args:
       - 'run'
@@ -128,7 +128,7 @@ steps:
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
    volumes:
-    - name: 'finance-forecaster-volume'
+       name: 'finance-forecaster-volume'
        path: '/persistent_volume'
     entrypoint: gcloud
     args:
@@ -143,7 +143,7 @@ steps:
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
    volumes:
-    - name: 'finance-forecaster-volume'
+       name: 'finance-forecaster-volume'
        path: '/persistent_volume'
     entrypoint: gcloud
     args:
@@ -158,7 +158,7 @@ steps:
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
    volumes:
-    - name: 'finance-forecaster-volume'
+       name: 'finance-forecaster-volume'
        path: '/persistent_volume'
     entrypoint: gcloud
     args:

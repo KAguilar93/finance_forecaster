@@ -120,6 +120,7 @@ steps:
       - 'docker-compose.yaml'
       - '--region'
       - 'us-central1'
+      - '-y'
 
 # Recording the image in the `images` block makes it show up in the build
 # detail page and links the build to the resulting artifact.

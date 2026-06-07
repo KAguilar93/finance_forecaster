@@ -35,6 +35,8 @@ steps:
   # builder still works post-GCR-shutdown; Google explicitly kept it serving
   # via Artifact Registry's gcr.io compatibility shim.
   - name: 'gcr.io/cloud-builders/docker'
+    env:
+      - 'DOCKER_BUILDKIT=1'
     args:
       - 'build'
       - '-f'
@@ -46,6 +48,8 @@ steps:
       - '.'
 
   - name: 'gcr.io/cloud-builders/docker'
+    env:
+      - 'DOCKER_BUILDKIT=1'
     args:
       - 'build'
       - '-f'
@@ -57,6 +61,8 @@ steps:
       - '.'
       
   - name: 'gcr.io/cloud-builders/docker'
+    env:
+      - 'DOCKER_BUILDKIT=1'
     args:
       - 'build'
       - '-f'
@@ -68,6 +74,8 @@ steps:
       - '.'      
 
   - name: 'gcr.io/cloud-builders/docker'
+    env:
+      - 'DOCKER_BUILDKIT=1'
     args:
       - 'build'
       - '-f'

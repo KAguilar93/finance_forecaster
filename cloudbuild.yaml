@@ -103,15 +103,15 @@ steps:
       - '--all-tags'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}'      
 
-    - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-        entrypoint: gcloud
-        args:
-          - 'run'
-          - 'compose'
-          - 'up'
-          - 'docker-compose.yaml'
-          - '--region'
-          - 'us-central1'
+ #   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+ #       entrypoint: gcloud
+ #       args:
+ #         - 'run'
+ #         - 'compose'
+ #         - 'up'
+ #         - 'docker-compose.yaml'
+ #         - '--region'
+ #         - 'us-central1'
 
 
 # Recording the image in the `images` block makes it show up in the build

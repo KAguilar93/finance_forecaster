@@ -133,7 +133,7 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'finance-forecaster-data'
+      - 'finance-forecaster-train'
       - '--image'
       - ''${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${_TAG}''
       - '--region'
@@ -147,7 +147,7 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'finance-forecaster-data'
+      - 'finance-forecaster-predict'
       - '--image'
       - ''${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${_TAG}''
       - '--region'
@@ -161,7 +161,7 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'finance-forecaster-data'
+      - 'finance-forecaster-backtest'
       - '--image'
       - ''${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${_TAG}''
       - '--region'

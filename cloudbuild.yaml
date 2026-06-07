@@ -37,45 +37,45 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
+      - '-f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE1}'
       - '-t'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${_TAG}'
       - '-t'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${SHORT_SHA}'
-      - 'f'
-      - '${_DOCKERFOLDER}/${_DOCKERFILE1}'
       - '.'
 
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
+      - '-f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE2}'      
       - '-t'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${_TAG}'
       - '-t'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${SHORT_SHA}'
-      - 'f'
-      - '${_DOCKERFOLDER}/${_DOCKERFILE2}'      
       - '.'
       
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
+      - '-f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE3}'
       - '-t'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${_TAG}'
       - '-t'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${SHORT_SHA}'
-      - 'f'
-      - '${_DOCKERFOLDER}/${_DOCKERFILE3}'
       - '.'      
 
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
+      - '-f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE4}'
       - '-t'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${_TAG}'
       - '-t'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${SHORT_SHA}'
-      - 'f'
-      - '${_DOCKERFOLDER}/${_DOCKERFILE4}'
       - '.'
 
   # Push the image (both tags) to the regional Artifact Registry host.
@@ -102,6 +102,17 @@ steps:
       - 'push'
       - '--all-tags'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}'      
+
+    - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+        entrypoint: gcloud
+        args:
+          - 'run'
+          - 'compose'
+          - 'up'
+          - 'docker-compose.yaml'
+          - '--region'
+          - 'us-central1'
+
 
 # Recording the image in the `images` block makes it show up in the build
 # detail page and links the build to the resulting artifact.

@@ -112,6 +112,8 @@ steps:
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}'     
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    env:
+      - 'COMPONENTS=google-cloud-cli-run-compose'    
     entrypoint: gcloud
     args:
       - 'run'
@@ -120,7 +122,6 @@ steps:
       - 'docker-compose.yaml'
       - '--region'
       - 'us-central1'
-      - '-y'
 
 # Recording the image in the `images` block makes it show up in the build
 # detail page and links the build to the resulting artifact.

@@ -17,8 +17,17 @@
 substitutions:
   _REGION: us-central1
   _REPO: finance-forecaster-docker-containers
-  _IMAGE: digits-svc
+  _IMAGE1: finance-forecaster-data
+  _IMAGE2: finance-forecaster-train
+  _IMAGE3: finance-forecaster-predict
+  _IMAGE4: finance-forecaster-backtest
+  _DOCKERFOLDER: dockerfiles
+  _DOCKERFILE1: data.dockerfile
+  _DOCKERFILE2: train.dockerfile
+  _DOCKERFILE3: predict.dockerfile
+  _DOCKERFILE4: backtest.dockerfile
   _TAG: v1
+  _DOCKER_COMPOSE_VERSION: 1.28.2
 
 steps:
   # Build the image with two tags so callers can refer to either the explicit
@@ -29,9 +38,44 @@ steps:
     args:
       - 'build'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:${_TAG}'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${_TAG}'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:${SHORT_SHA}'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${SHORT_SHA}'
+      - 'f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE1}'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${SHORT_SHA}'
+      - 'f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE2}'      
+      - '.'
+      
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${SHORT_SHA}'
+      - 'f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE3}'
+      - '.'      
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${SHORT_SHA}'
+      - 'f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE4}'
       - '.'
 
   # Push the image (both tags) to the regional Artifact Registry host.
@@ -39,13 +83,38 @@ steps:
     args:
       - 'push'
       - '--all-tags'
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}'
+      
+   - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}'
+
+   - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}'      
 
 # Recording the image in the `images` block makes it show up in the build
 # detail page and links the build to the resulting artifact.
 images:
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:${_TAG}'
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:${SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${SHORT_SHA}'
+
 
 # Cloud Logging only (no Cloud Storage logs bucket needed). Required if your
 # build does not have a `logs_bucket` set and you are not using a custom

@@ -113,7 +113,7 @@ steps:
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     env:
-      - 'COMPONENTS=google-cloud-cli-run-compose'    
+      - 'COMPONENTS=run-compose'    
     entrypoint: gcloud
     args:
       - 'run'

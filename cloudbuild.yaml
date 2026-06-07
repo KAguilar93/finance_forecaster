@@ -90,7 +90,7 @@ steps:
       - 'push'
       - '--all-tags'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}'
-      
+
    - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'

@@ -112,14 +112,8 @@ steps:
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}'     
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: sudo
-    args:
-      - 'apt-get'
-      - 'install'
-      - 'google-cloud-cli-run-compose'
-      - '--quiet'
-
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    env:
+      - 'COMPONENTS=google-cloud-cli-run-compose'    
     entrypoint: gcloud
     args:
       - 'run'

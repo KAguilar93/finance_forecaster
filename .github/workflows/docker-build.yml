@@ -21,15 +21,45 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push to Docker Hub
+      - name: Build and push data dockerfile to Docker Hub
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: dockerfiles/Dockerfile
+          file: dockerfiles/data.dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-data:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-data:${{ github.sha }}
+            
+      - name: Build and push train dockerfile to Docker Hub
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: dockerfiles/train.dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-train:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-train:${{ github.sha }}
+
+      - name: Build and push predict dockerfile to Docker Hub
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: dockerfiles/predict.dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-predict:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-predict:${{ github.sha }}
+
+      - name: Build and push backtest dockerfile to Docker Hub
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: dockerfiles/backtest.dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-backtest:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-backtest:${{ github.sha }}            
 
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
@@ -39,8 +69,26 @@ jobs:
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
-      - name: Push to Artifact Registry
+      - name: Push Data Docker Image to Artifact Registry
         run: |
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster:latest \
-            us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/finance-forecaster/finance_forecaster:latest
-          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/finance-forecaster/finance_forecaster:latest
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-data:latest \
+            us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/finance-forecaster/finance_forecaster-data:latest
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/finance-forecaster/finance_forecaster-data:latest
+
+     - name: Push Train Docker Image to Artifact Registry
+        run: |
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-train:latest \
+            us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/finance-forecaster/finance_forecaster-train:latest
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/finance-forecaster/finance_forecaster-train:latest
+          
+     - name: Push Predict Docker Image to Artifact Registry
+        run: |
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-predict:latest \
+            us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/finance-forecaster/finance_forecaster-predict:latest
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/finance-forecaster/finance_forecaster-predict:latest
+
+     - name: Push Backtest Docker Image to Artifact Registry
+        run: |
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/finance_forecaster-backtest:latest \
+            us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/finance-forecaster/finance_forecaster-backtest:latest
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/finance-forecaster/finance_forecaster-backtest:latest          

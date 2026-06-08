@@ -149,7 +149,7 @@ Currently only tracks and predicts one index: QQQ
 
 ## Status
 
-- Start Date: 5/29/2026
+- Start Date: 5/23/2026
 - Estimated Completion: 6/7/2026
 - Actual Completion: TBD
 - Status: Deploys on Push but deployments are broken

@@ -111,21 +111,21 @@ steps:
       - '--all-tags'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}'     
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    volumes:
-    - name:
-       'finance-forecaster-volume'
-      path:
-       '/persistent_volume'
-    entrypoint: gcloud
-    args:
-      - 'run'
-      - 'deploy'
-      - 'finance-forecaster-data'
-      - '--image'
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${_TAG}'
-      - '--region'
-      - 'us-central1'
+#  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#    volumes:
+#    - name:
+#       'finance-forecaster-volume'
+#      path:
+#       '/persistent_volume'
+#    entrypoint: gcloud
+#    args:
+#      - 'run'
+#      - 'deploy'
+#      - 'finance-forecaster-data'
+#      - '--image'
+#      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${_TAG}'
+#      - '--region'
+#      - 'us-central1'
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     volumes:

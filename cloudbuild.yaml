@@ -124,8 +124,6 @@ steps:
       - 'finance-forecaster-data'
       - '--image'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${_TAG}'
-      - '--port'
-      - '8080'
       - '--region'
       - 'us-central1'
       - '--allow-unauthenticated'

@@ -68,16 +68,16 @@ Follow these steps for setting up a GCS Artifact Registry and Pushing and Pullin
 
 ### Pre-Requisites:
 
-GCP CLI installed
-GCP Account Created with 1 GPU and the following services enabled:
-compute
-storage
-artifactregistry
-cloudbuild
-run
-cloudfunctions
-iam
-aiplatform
+GCP CLI installed\
+GCP Account Created with 1 GPU and the following services enabled:\
+compute\
+storage\
+artifactregistry\
+cloudbuild\
+run\
+cloudfunctions\
+iam\
+aiplatform\
 GCP IAM roles assigned
 
 To Create GCloud Artifact Registry run:

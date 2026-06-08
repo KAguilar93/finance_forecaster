@@ -14,7 +14,6 @@ from pathlib import Path
 
 from finance_forecaster.train_model import main
 
-
 PROFILE_DIR = Path("reports/profiling")
 PROFILE_OUTPUT = PROFILE_DIR / "training_profile.out"
 PROFILE_REPORT = PROFILE_DIR / "cprofile_results.txt"

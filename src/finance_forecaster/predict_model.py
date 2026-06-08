@@ -33,7 +33,7 @@ FORECAST_WINDOW = 30
 
 def predict(input_path: Path, output_path: Path) -> None:
     """Generate next-day directional predictions from input price data.
-    
+
     Pipeline:
     1. Load CSV with price/Close column, normalizing column names
     2. Calculate log returns for stationarity
@@ -41,7 +41,7 @@ def predict(input_path: Path, output_path: Path) -> None:
     4. Evaluate in-sample accuracy by comparing forecasts to actual returns
     5. Train final model on all historical data for next-day prediction
     6. Write results to CSV with predictions and accuracy metrics
-    
+
     Args:
         input_path: Path to CSV file containing price data (from yfinance format)
         output_path: Path where prediction results will be written
@@ -65,7 +65,7 @@ def predict(input_path: Path, output_path: Path) -> None:
     # Setup rolling window validation: use last FORECAST_WINDOW days for evaluation
     eval_dates = df.index[-FORECAST_WINDOW:]
     logger.info("Running ARIMA(1,0,1) rolling forecast over %d days...", FORECAST_WINDOW)
-    
+
     # Suppress statsmodels convergence warnings (expected for time series fitting)
     warnings.filterwarnings("ignore", module="statsmodels")
     # Generate rolling forecasts (model retrains for each date, using prior data only)
@@ -77,12 +77,12 @@ def predict(input_path: Path, output_path: Path) -> None:
     # so we align forecast at d with actual return on d+1 (using shift(-1))
     results = df.loc[eval_dates].copy()
     results["arima_forecast_pct"] = forecasts["arima_mean_forecast_percent"]
-    
+
     # Convert forecast values to directional predictions (UP/DOWN)
     results["predicted_direction"] = (results["arima_forecast_pct"] > 0).map({True: "UP", False: "DOWN"})
     # Actual direction on next day (shift backward one row to align with forecast date)
     results["actual_direction"] = (results["log_return"].shift(-1) > 0).map({True: "UP", False: "DOWN"})
-    
+
     # Remove last row which has no next-day actual value
     results = results.dropna(subset=["actual_direction"])
     # Check if prediction matches actual direction
@@ -126,10 +126,10 @@ def predict(input_path: Path, output_path: Path) -> None:
 
 def main() -> None:
     """CLI entrypoint for batch prediction.
-    
+
     Generates next-day directional predictions for QQQ and evaluates accuracy
     on a rolling window of recent data.
-    
+
     Example usage:
         python predict_model.py --input data/raw/qqq_raw.csv --output predictions/pred.csv
     """
@@ -158,4 +158,3 @@ def main() -> None:
 # Execute prediction pipeline when run as script
 if __name__ == "__main__":
     main()
-

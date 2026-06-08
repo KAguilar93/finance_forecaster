@@ -351,7 +351,7 @@ See [PHASE3.md](PHASE3.md) for the full checklist with evidence.
 ### Live Services
 - **Hugging Face Space (UI):** https://financeforecaster-financeforecasterapp.hf.space/?__theme=system&deep_link=zrF7v-q-54M
 - **Cloud Run API:** *(URL added after deployment — see PHASE3.md Section 3.4)*
-- **Cloud Functions endpoint:** https://finance-forecaster-app-880001820336.us-central1.run.app
+- **Cloud Functions endpoint:** https://finance-forecaster-app-880001820336.us-central1.run.app/
 
 ### CI/CD
 [![CI](https://github.com/KAguilar93/finance_forecaster/actions/workflows/ci.yml/badge.svg)](https://github.com/KAguilar93/finance_forecaster/actions/workflows/ci.yml)

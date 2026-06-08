@@ -46,6 +46,7 @@ exclude = [
     "data/download.py",
     "tests/regime_aware_backtest.py",
     "configs/config.py",
+    "notebooks/finance_forecaster_notebook.ipynb",
 ]
 
 [tool.ruff.lint]

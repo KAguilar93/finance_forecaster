@@ -36,20 +36,20 @@ DATA_PATH = Path("data/raw/qqq_raw.csv")
 
 def load_data(data_path: Path) -> pd.DataFrame:
     """Load and prepare price data from a yfinance CSV.
-    
+
     Args:
         data_path: Path to CSV file with OHLCV data from yfinance
-    
+
     Returns:
         DataFrame with columns: price, log_return indexed by date
     """
     # Read CSV, using date column as index and skipping metadata rows
     df = pd.read_csv(data_path, index_col=0, parse_dates=True, skiprows=[1, 2])
-    
+
     # Rename 'Close' to 'price' for consistency across data sources
     if "Close" in df.columns and "price" not in df.columns:
         df = df.rename(columns={"Close": "price"})
-    
+
     # Add log returns feature and remove any NaN values
     return add_log_returns(df).dropna()
 
@@ -60,15 +60,15 @@ def evaluate_arima(
     test_split: float,
 ) -> tuple[object, dict[str, float], dict[str, float]]:
     """Fit ARIMA on train split, evaluate rolling 1-step forecasts on test split.
-    
+
     Uses a walk-forward validation approach where the model is retrained for each
     test observation, simulating real-world deployment where new data arrives daily.
-    
+
     Args:
         df: DataFrame with columns ['log_return', 'price']
         order: ARIMA (p, d, q) parameters
         test_split: Fraction of data to use for testing (e.g., 0.2 = 80/20 split)
-    
+
     Returns:
         Tuple of (fitted_model, classification_metrics, regression_metrics)
     """
@@ -122,16 +122,16 @@ def prepare_lstm_sequences(
     test_split: float,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, StandardScaler]:
     """Build lookback sequences for LSTM training.
-    
+
     Transforms 1D time series into 2D sequences suitable for LSTM:
     Input shape: (n_samples, lookback, n_features)
     Each sample contains 'lookback' historical observations.
-    
+
     Args:
         df: DataFrame with OHLCV and engineered features
         lookback: Number of historical days to include in each sequence
         test_split: Fraction of data for testing
-    
+
     Returns:
         Tuple of (X_train, X_test, y_train, y_test, scaler) where X arrays
         have shape (n_samples, lookback, n_features)
@@ -173,14 +173,14 @@ def evaluate_lstm(
     test_split: float,
 ) -> tuple[Any, dict[str, float]]:
     """Train LSTM and return fitted model + classification metrics.
-    
+
     Args:
         df: DataFrame with OHLCV and engineered features
         epochs: Number of training epochs
         batch_size: Number of samples per gradient update
         lookback: Length of input sequences (historical days)
         test_split: Fraction of data for testing
-    
+
     Returns:
         Tuple of (trained_model, classification_metrics_dict)
     """
@@ -223,13 +223,13 @@ def train(
     test_split: float,
 ) -> None:
     """Train the selected model and log the run to MLflow.
-    
+
     Supports two model types:
     - 'arima': Classical statistical time series model
     - 'lstm': Deep learning recurrent neural network
-    
+
     All metrics and artifacts are logged to MLflow for experiment tracking.
-    
+
     Args:
         data_path: Path to input CSV file
         model_dir: Directory where trained model will be saved
@@ -271,7 +271,7 @@ def train(
             order = (arima_p, arima_d, arima_q)
             mlflow.log_params({"arima_p": arima_p, "arima_d": arima_d, "arima_q": arima_q})
             logger.info("Fitting ARIMA%s...", order)
-            
+
             # Fit and evaluate ARIMA model
             fitted, clf, reg = evaluate_arima(df, order, test_split)
 
@@ -298,7 +298,7 @@ def train(
             # Log LSTM hyperparameters
             mlflow.log_params({"epochs": epochs, "batch_size": batch_size, "lookback": lookback})
             logger.info("Training LSTM (epochs=%d, batch=%d, lookback=%d)...", epochs, batch_size, lookback)
-            
+
             # Train and evaluate LSTM model
             model, clf = evaluate_lstm(df, epochs, batch_size, lookback, test_split)
 
@@ -329,10 +329,10 @@ def train(
 
 def main() -> None:
     """CLI entrypoint for model training.
-    
+
     Supports training both ARIMA and LSTM models with customizable parameters.
     Run with --help to see all available options.
-    
+
     Example usage:
         python train_model.py --model-type arima --arima-p 1 --arima-d 1 --arima-q 1
         python train_model.py --model-type lstm --epochs 100 --batch-size 32 --lookback 30
@@ -343,17 +343,19 @@ def main() -> None:
     parser.add_argument("--model-dir", type=Path, default=MODELS_DIR)
     parser.add_argument("--model-type", choices=["arima", "lstm"], default="arima")
     parser.add_argument("--test-split", type=float, default=0.2, help="Fraction of data for testing")
-    
+
     # ARIMA-specific arguments
     parser.add_argument("--arima-p", type=int, default=1, help="AR (autoregressive) order")
     parser.add_argument("--arima-d", type=int, default=0, help="I (differencing) order")
     parser.add_argument("--arima-q", type=int, default=1, help="MA (moving average) order")
-    
+
     # LSTM-specific arguments
     parser.add_argument("--epochs", type=int, default=DEFAULT_CONFIG.training.epochs)
     parser.add_argument("--batch-size", type=int, default=DEFAULT_CONFIG.training.batch_size)
     parser.add_argument("--lookback", type=int, default=30, help="Historical days in each sequence")
-    parser.add_argument("--seed", type=int, default=DEFAULT_CONFIG.training.seed, help="Random seed for reproducibility")
+    parser.add_argument(
+        "--seed", type=int, default=DEFAULT_CONFIG.training.seed, help="Random seed for reproducibility"
+    )
     args = parser.parse_args()
 
     # Initialize logging and random seed for reproducibility

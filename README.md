@@ -18,7 +18,7 @@ finance_forecaster is a machine learning project that implements a Finance Forec
 See [Phase 1 Project Proposal](docs/PHASE1.md) for the full project proposal, deliverable documentation, in depth and alternative
 installation instructions.\
 See [Phase 2 Project Instructions](docs/PHASE2.md) for full instructions on running our containerized pipeline, profiling, logging,
-debugging samples, challenges & solutions, and key results from our Finance Forecasting Pipeline.
+debugging samples, challenges & solutions, and key results from our Finance Forecasting Pipeline.\
 See [Phase 3 CI/CD](docs/PHASE3.md) for CI/CD steps and instructions
 
 **Key Objectives:**

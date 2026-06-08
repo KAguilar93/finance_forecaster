@@ -19,6 +19,7 @@ See [Phase 1 Project Proposal](docs/PHASE1.md) for the full project proposal, de
 installation instructions.\
 See [Phase 2 Project Instructions](docs/PHASE2.md) for full instructions on running our containerized pipeline, profiling, logging,
 debugging samples, challenges & solutions, and key results from our Finance Forecasting Pipeline.
+See [Phase 3 CI/CD](docs/PHASE3.md) for CI/CD steps and instructions
 
 **Key Objectives:**
 - [ ] Provide Next Day Finance Movement Preditions with ~55% Accuracy
@@ -142,6 +143,10 @@ Sample Commands for running pipeline [from project root folder where docker-comp
 ![docker compose up](docs/screenshots/docker%20compose%20up%20comand.png)
 ![make docker_run](docs/screenshots/make%20docker_run%20comand.png)
 
+### CI/CD
+
+App is automatically and continuously deployed to Google Cloud Services and Hugging Face Spaces upon
+update pushes to main branch.
 
 ## Technology Stack
 

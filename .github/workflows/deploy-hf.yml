@@ -1,0 +1,25 @@
+name: Deploy to Hugging Face Spaces
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app.py"
+      - "requirements-ui.txt"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config user.email "financeforecasters.mlops489@gmail.com"
+          git config user.name "FinanceForecasters"
+          git remote add hf https://FinanceForecasters:$HF_TOKEN@huggingface.co/spaces/FinanceForecasters/finance-forecaster
+          git subtree push --prefix . hf main

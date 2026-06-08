@@ -1,0 +1,62 @@
+name: CML - Model Training Report
+
+on:
+  pull_request:
+    branches: [main, development-staging]
+
+jobs:
+  train-and-report:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Pull data with DVC (if credentials available)
+        env:
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+        run: dvc pull || echo "DVC pull failed or skipped, make full will fetch fresh data"
+
+      - name: Run training pipeline
+        env:
+          MLFLOW_ALLOW_FILE_STORE: "true"
+        run: make full
+
+      - name: Upload equity curve
+        uses: actions/upload-artifact@v4
+        with:
+          name: equity-curve
+          path: reports/figures/ensemble_regime_backtest.png
+
+      - name: Post training report as PR comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "## Model Training Report" >> report.md
+          echo "" >> report.md
+          echo "**Commit:** \`${{ github.sha }}\`" >> report.md
+          echo "" >> report.md
+          echo "### Trade Performance" >> report.md
+          echo '```' >> report.md
+          cat reports/trade_performance.txt >> report.md
+          echo '```' >> report.md
+          echo "" >> report.md
+          echo "### Next Day Prediction" >> report.md
+          echo '```' >> report.md
+          cat reports/next_day_ensemble_prediction.txt >> report.md
+          echo '```' >> report.md
+          echo "" >> report.md
+          echo "### Equity Curve" >> report.md
+          echo "See the equity curve in the [workflow artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})." >> report.md
+          gh pr comment ${{ github.event.pull_request.number }} --body-file report.md

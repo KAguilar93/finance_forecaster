@@ -18,7 +18,8 @@ finance_forecaster is a machine learning project that implements a Finance Forec
 See [Phase 1 Project Proposal](docs/PHASE1.md) for the full project proposal, deliverable documentation, in depth and alternative
 installation instructions.\
 See [Phase 2 Project Instructions](docs/PHASE2.md) for full instructions on running our containerized pipeline, profiling, logging,
-debugging samples, challenges & solutions, and key results from our Finance Forecasting Pipeline.
+debugging samples, challenges & solutions, and key results from our Finance Forecasting Pipeline.\
+See [Phase 3 CI/CD](docs/PHASE3.md) for CI/CD steps and instructions
 
 **Key Objectives:**
 - [ ] Provide Next Day Finance Movement Preditions with ~55% Accuracy
@@ -142,6 +143,10 @@ Sample Commands for running pipeline [from project root folder where docker-comp
 ![docker compose up](docs/screenshots/docker%20compose%20up%20comand.png)
 ![make docker_run](docs/screenshots/make%20docker_run%20comand.png)
 
+### CI/CD
+
+App is automatically and continuously deployed to Google Cloud Services and Hugging Face Spaces upon
+update pushes to main branch.
 
 ## Technology Stack
 
@@ -338,6 +343,37 @@ Kevin Aguilar led: Project structure and git branching strategies, containerizat
 - [Phase 1 — Project Design & Model Development](PHASE1.md)
 - [Phase 2 — Containerization & Monitoring](PHASE2.md)
 - [Phase 3 — CI/CD & Deployment](PHASE3.md)
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+
+## Phase 3: CI/CD & Deployment
+
+See [PHASE3.md](PHASE3.md) for the full checklist with evidence.
+
+### Live Services
+- **Hugging Face Space (UI):** https://financeforecaster-financeforecasterapp.hf.space/?__theme=system&deep_link=zrF7v-q-54M
+- **Cloud Run API:** *(URL added after deployment — see PHASE3.md Section 3.4)*
+- **Cloud Functions endpoint:** https://finance-forecaster-app-880001820336.us-central1.run.app/
+
+### CI/CD
+[![CI](https://github.com/KAguilar93/finance_forecaster/actions/workflows/ci.yml/badge.svg)](https://github.com/KAguilar93/finance_forecaster/actions/workflows/ci.yml)
+[![Docker Build](https://github.com/KAguilar93/finance_forecaster/actions/workflows/docker-build.yml/badge.svg)](https://github.com/KAguilar93/finance_forecaster/actions/workflows/docker-build.yml)
+
+### New Tools Added in Phase 3
+- CML (Continuous Machine Learning) via `iterative/cml`
+- GCP Artifact Registry, Compute Engine, Cloud Run, Cloud Functions
+- Gradio UI on Hugging Face Spaces
+- Automated Docker Hub and Artifact Registry pushes on every commit to `main`
+
+### Serve the API locally
+```bash
+make serve
+# → http://localhost:8080/health
+# → POST http://localhost:8080/predict  {"ticker": "QQQ"}
+```
 
 ## License
 

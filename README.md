@@ -349,7 +349,7 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 See [PHASE3.md](PHASE3.md) for the full checklist with evidence.
 
 ### Live Services
-- **Hugging Face Space (UI):** https://huggingface.co/spaces/FinanceForecasters/finance-forecaster
+- **Hugging Face Space (UI):** https://financeforecaster-financeforecasterapp.hf.space/?__theme=system&deep_link=zrF7v-q-54M
 - **Cloud Run API:** *(URL added after deployment — see PHASE3.md Section 3.4)*
 - **Cloud Functions endpoint:** *(URL added after deployment — see PHASE3.md Section 3.3)*
 

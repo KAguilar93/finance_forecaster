@@ -1,0 +1,199 @@
+# Cloud Build configuration for the Artifact Registry exercise.
+#
+# Two steps: build the image, then push it to the regional Artifact Registry
+# repository. The image is tagged with both the explicit user-supplied tag
+# (_TAG, default "v1") and the short commit SHA so you can trace any image
+# back to the commit it was built from.
+#
+# Substitutions
+#   _REGION   GCP region of the Artifact Registry repo, e.g. us-central1
+#   _REPO     Name of the Artifact Registry repository, e.g. mlops489-docker
+#   _IMAGE    Image name inside the repo, e.g. digits-svc
+#   _TAG      Human-friendly tag, e.g. v1
+# Built-in
+#   $PROJECT_ID    Active GCP project (set by Cloud Build)
+#   $SHORT_SHA     7-char commit SHA (set when triggered from a git push)
+
+substitutions:
+  _REGION: us-central1
+  _REPO: finance-forecaster-docker-containers
+  _IMAGE1: finance-forecaster-data
+  _IMAGE2: finance-forecaster-train
+  _IMAGE3: finance-forecaster-predict
+  _IMAGE4: finance-forecaster-backtest
+  _DOCKERFOLDER: dockerfiles
+  _DOCKERFILE1: data.dockerfile
+  _DOCKERFILE2: train.dockerfile
+  _DOCKERFILE3: predict.dockerfile
+  _DOCKERFILE4: backtest.dockerfile
+  _TAG: v1
+  _DOCKER_COMPOSE_VERSION: 1.28.2
+
+steps:
+  # Build the image with two tags so callers can refer to either the explicit
+  # release tag (v1) or the commit it came from. The `gcr.io/cloud-builders/docker`
+  # builder still works post-GCR-shutdown; Google explicitly kept it serving
+  # via Artifact Registry's gcr.io compatibility shim.
+  - name: 'gcr.io/cloud-builders/docker'
+    env:
+      - 'DOCKER_BUILDKIT=1'
+    args:
+      - 'build'
+      - '-f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE1}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${SHORT_SHA}'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    env:
+      - 'DOCKER_BUILDKIT=1'
+    args:
+      - 'build'
+      - '-f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE2}'      
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${SHORT_SHA}'
+      - '.'
+      
+  - name: 'gcr.io/cloud-builders/docker'
+    env:
+      - 'DOCKER_BUILDKIT=1'
+    args:
+      - 'build'
+      - '-f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE3}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${SHORT_SHA}'
+      - '.'      
+
+  - name: 'gcr.io/cloud-builders/docker'
+    env:
+      - 'DOCKER_BUILDKIT=1'
+    args:
+      - 'build'
+      - '-f'
+      - '${_DOCKERFOLDER}/${_DOCKERFILE4}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${SHORT_SHA}'
+      - '.'
+
+  # Push the image (both tags) to the regional Artifact Registry host.
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    volumes:
+    - name:
+       'finance-forecaster-volume'
+      path:
+       '/persistent_volume'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'finance-forecaster-data'
+      - '--image'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${_TAG}'
+      - '--region'
+      - 'us-central1'
+      - '--allow-unauthenticated'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    volumes:
+    - name:
+       'finance-forecaster-volume'
+      path:
+       '/persistent_volume'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'finance-forecaster-train'
+      - '--image'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${_TAG}'
+      - '--region'
+      - 'us-central1'
+      - '--allow-unauthenticated'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    volumes:
+    - name: 
+       'finance-forecaster-volume'
+      path:
+       '/persistent_volume'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'finance-forecaster-predict'
+      - '--image'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${_TAG}'
+      - '--region'
+      - 'us-central1'
+      - '--allow-unauthenticated'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    volumes:
+    - name: 
+       'finance-forecaster-volume'
+      path: 
+       '/persistent_volume'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'finance-forecaster-backtest'
+      - '--image'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${_TAG}'
+      - '--region'
+      - 'us-central1'
+      - '--allow-unauthenticated'
+
+# Recording the image in the `images` block makes it show up in the build
+# detail page and links the build to the resulting artifact.
+images:
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE1}:${SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE2}:${SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE3}:${SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE4}:${SHORT_SHA}'
+
+
+# Cloud Logging only (no Cloud Storage logs bucket needed). Required if your
+# build does not have a `logs_bucket` set and you are not using a custom
+# service account with the legacy storage roles.
+options:
+  logging: CLOUD_LOGGING_ONLY

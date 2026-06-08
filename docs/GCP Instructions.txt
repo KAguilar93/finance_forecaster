@@ -1,0 +1,33 @@
+GCP Documentation
+
+Pre-Requisites:
+
+GCP CLI installed
+GCP Account Created with 1 GPU and the following services enabled:
+	compute
+	storage
+	artifactregistry
+	cloudbuild
+	run
+	cloudfunctions
+	iam
+	aiplatform
+GCP IAM roles assigned
+
+To Create Docker Artifact Registry run:
+
+	gcloud artifacts repositories create finance-forecaster-docker-containers \
+		--repository-format=docker \
+		--location=us-central1 \
+		--description="MLOps Finance Forecaster Docker Container registry"
+	
+To push/pull from this registry use:
+	us-central1-docker.pkg.dev/finance-forecasters-pipeline/finance-forecaster-docker-containers
+
+
+
+https://finance-forecaster-app-880001820336.us-central1.run.app
+
+gcloud ai custom-jobs create --region=us-central1 --display-name=finance-forecaster-training --config="F:\DePaul\MS-SESA\SE489 - ML Engineering for Production (MLOps)\Assignments & Work\Finance Forecasters\finance_forecaster\config_cpu.yaml"
+
+gcloud ai custom-jobs stream-logs projects/880001820336/locations/us-central1/customJobs/6949981645910835200

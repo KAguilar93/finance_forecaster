@@ -23,3 +23,11 @@ To Create Docker Artifact Registry run:
 	
 To push/pull from this registry use:
 	us-central1-docker.pkg.dev/finance-forecasters-pipeline/finance-forecaster-docker-containers
+
+
+
+https://finance-forecaster-app-880001820336.us-central1.run.app
+
+gcloud ai custom-jobs create --region=us-central1 --display-name=finance-forecaster-training --config="F:\DePaul\MS-SESA\SE489 - ML Engineering for Production (MLOps)\Assignments & Work\Finance Forecasters\finance_forecaster\config_cpu.yaml"
+
+gcloud ai custom-jobs stream-logs projects/880001820336/locations/us-central1/customJobs/6949981645910835200
